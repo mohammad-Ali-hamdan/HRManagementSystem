@@ -65,7 +65,7 @@ public class DepartmentCService implements DepartmentService{
         }
         if(!IsExistDepartment)
         {
-            Integer id = depRepo.getMaxdepID() +1 ;
+            Integer id = depRepo.getMaxdepID() + 1 ;
             DepartmentEntity departmentEntity =  depMap.depEntity(departmentDTO);
             departmentEntity.setId(id);
             depRepo.save(departmentEntity);
@@ -75,6 +75,21 @@ public class DepartmentCService implements DepartmentService{
         else return null;
 
 
+
+    }
+
+    @Override
+    public boolean deleteDep(Integer id) // Delete existence department
+    {
+        boolean isDeleted = false;
+        Optional<DepartmentEntity> departmentEntityOptional = depRepo.findById(id);
+        if(departmentEntityOptional.isPresent())
+        {
+            depRepo.deleteById(id);
+            isDeleted = true;
+
+        }
+        return isDeleted;
 
     }
 

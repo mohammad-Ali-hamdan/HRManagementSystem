@@ -8,4 +8,5 @@ public interface DepartmentService {
     public List<DepartmentDTO> getallDepartments();
     public DepartmentDTO getDepartmentById(Integer id);
     public DepartmentDTO createDepartment(DepartmentDTO departmentDTO);
+    public boolean deleteDep(Integer id);
 }

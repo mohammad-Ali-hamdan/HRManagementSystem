@@ -19,27 +19,31 @@ public class EmployeeController {
 
 
     @GetMapping("/getall")
-    public List<EmployeeDTO> getAll()
+    public ResponseEntity< List<EmployeeDTO>> getAll()
     {
-        return service.getAllEmployees();
+        List<EmployeeDTO> employeeDTOList =   service.getAllEmployees();
+        if(!employeeDTOList.isEmpty())
+            return new ResponseEntity<List<EmployeeDTO>>(employeeDTOList , HttpStatus.OK);
+        else
+            return new ResponseEntity<List<EmployeeDTO>>(employeeDTOList , HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/getbyid")
-    public EmployeeDTO getByID(@RequestParam Integer id)
+    public ResponseEntity<EmployeeDTO> getByID(@RequestParam Integer id)
     {
-        return service.getByID(id);
+        EmployeeDTO employeeDTO =  service.getByID(id);
+        if(employeeDTO != null)
+            return new ResponseEntity<EmployeeDTO>(employeeDTO , HttpStatus.OK);
+        else
+            return new ResponseEntity<EmployeeDTO>(employeeDTO , HttpStatus.NOT_FOUND);
     }
+
+
 
     @GetMapping("/getempbydep")
-    public List<EmployeeDTO> ListEmployeesByDepartment(@RequestParam String name)
+    public ResponseEntity<List<EmployeeDTO>> ListEmployeesByDepartment(@RequestParam String name)
     {
-        return service.ListEmployeesByDepartment(name);
-    }
-
-    @GetMapping("/getempbydep3")
-    public ResponseEntity<List<EmployeeDTO>> ListEmployeesByDepartment3(@RequestParam String name)
-    {
-        List<EmployeeDTO> employeeDTOS =  service.ListEmployeesByDepartment3(name);
+        List<EmployeeDTO> employeeDTOS =  service.ListEmployeesByDepartment(name);
         if (employeeDTOS.isEmpty())
             return new ResponseEntity<List<EmployeeDTO>>(employeeDTOS ,HttpStatus.NOT_FOUND );
         else
@@ -47,32 +51,40 @@ public class EmployeeController {
     }
 
     @PostMapping("/createEmp")
-    public EmployeeDTO createEmp(@RequestBody EmployeeDTO employeeDTOInput)
+    public ResponseEntity<EmployeeDTO> createEmp(@RequestBody EmployeeDTO employeeDTOInput)
     {
-        return service.CreateEmployee(employeeDTOInput);
-    }
-    @PostMapping("/createEmp2")
-    public ResponseEntity<EmployeeDTO> createEmp2(@RequestBody EmployeeDTO employeeDTOInput)
-    {
-        EmployeeDTO dto = service.CreateEmployee(employeeDTOInput);
-        if(dto == null)
-            return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
+        EmployeeDTO employeeDTO =  service.CreateEmployee(employeeDTOInput);
+        if (employeeDTO != null)
+            return new ResponseEntity<EmployeeDTO>(employeeDTO ,HttpStatus.OK );
         else
-            return new ResponseEntity<>(dto , HttpStatus.OK);
+            return new ResponseEntity<EmployeeDTO>(employeeDTO ,HttpStatus.NOT_FOUND);
 
     }
+
+
+
 
     @DeleteMapping("/deleteEmp")
-    public void deleteEmp(@RequestParam Integer id)
+    public ResponseEntity<String> deleteEmp(@RequestParam Integer id)
     {
-        service.deleteEmp(id);
+        boolean ISdeleted = service.deleteEmp(id);
+        if (ISdeleted)
+            return new ResponseEntity<String>("deleted" ,HttpStatus.OK );
+        else
+            return new ResponseEntity<String>("Failed to delete!" ,HttpStatus.NOT_FOUND);
+
     }
 
     @PatchMapping("/updateEmp")
-    public EmployeeDTO updateEmp(@RequestBody Map<String , Object> dto)
+    public ResponseEntity<EmployeeDTO> updateEmp(@RequestBody Map<String , Object> dto)
     {
         Integer id = (Integer) dto.get("id");
-        return service.updateEmp(dto , id);
+        EmployeeDTO employeeDTO =  service.updateEmp(dto , id);
+        if (employeeDTO != null)
+            return new ResponseEntity<EmployeeDTO>(employeeDTO ,HttpStatus.OK );
+        else
+            return new ResponseEntity<EmployeeDTO>(employeeDTO ,HttpStatus.NOT_FOUND);
+
     }
 
 
