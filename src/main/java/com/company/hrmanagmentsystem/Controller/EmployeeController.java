@@ -40,10 +40,19 @@ public class EmployeeController {
 
 
 
-    @GetMapping("/getempbydep")
-    public ResponseEntity<List<EmployeeDTO>> ListEmployeesByDepartment(@RequestParam String name)
+//    @GetMapping("/getempbydep") // get employees by name
+//    public ResponseEntity<List<EmployeeDTO>> ListEmployeesByDepartment(@RequestParam String name)
+//    {
+//        List<EmployeeDTO> employeeDTOS =  service.ListEmployeesByDepartment(name);
+//        if (employeeDTOS.isEmpty())
+//            return new ResponseEntity<List<EmployeeDTO>>(employeeDTOS ,HttpStatus.NOT_FOUND );
+//        else
+//            return new ResponseEntity<List<EmployeeDTO>>(employeeDTOS ,HttpStatus.OK);
+//    }
+    @GetMapping("/getempbydep/{id}") //
+    public ResponseEntity<List<EmployeeDTO>> ListEmployeesByDepartment(@PathVariable Integer id)
     {
-        List<EmployeeDTO> employeeDTOS =  service.ListEmployeesByDepartment(name);
+        List<EmployeeDTO> employeeDTOS =  service.ListEmployeesByDepartment(id);
         if (employeeDTOS.isEmpty())
             return new ResponseEntity<List<EmployeeDTO>>(employeeDTOS ,HttpStatus.NOT_FOUND );
         else

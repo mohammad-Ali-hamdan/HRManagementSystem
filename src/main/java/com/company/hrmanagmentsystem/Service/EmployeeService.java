@@ -15,7 +15,7 @@ public interface EmployeeService {
     public EmployeeDTO updateEmp(Map<String , Object> dtoObject , Integer id );
     //public List<EmployeeDTO> ListEmployeesByDepartment(String name);
     //public List<EmployeeDTO> ListEmployeesByDepartment2(String name);
-    public List<EmployeeDTO> ListEmployeesByDepartment(String name);
+    public List<EmployeeDTO> ListEmployeesByDepartment(Integer id);
 
 
 }

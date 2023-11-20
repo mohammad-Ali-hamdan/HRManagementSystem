@@ -22,5 +22,9 @@ public class EmployeeEntity {
     @Basic@Column(name = "department_id")
     private int departmentId;
 
+//    @OneToOne(mappedBy = "employeeEntity")
+//    private LeavedetailsEntity1 leavedetailsEntity;
+
+
 
 }

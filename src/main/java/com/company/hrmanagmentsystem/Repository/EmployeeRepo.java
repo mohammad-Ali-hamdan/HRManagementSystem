@@ -13,6 +13,9 @@ public interface EmployeeRepo extends JpaRepository<EmployeeEntity , Integer> {
     @Query(nativeQuery = true , value = "Select Max(id) From managementsystem.employee")
     public Integer GetMaxEmpId();
 
+    @Query(nativeQuery = true , value = "select name from managementsystem.employee Where id= :empId")
+    String findempByName(@Param("empId") Integer id);
+
     @Procedure(name = "departmentIDs")
     public List<Integer> departmentIDs();
 
@@ -22,6 +25,12 @@ public interface EmployeeRepo extends JpaRepository<EmployeeEntity , Integer> {
     @Procedure(name = "ListEmployeesInDepartment")
     public List<Integer> ListEmployeesInDepartment(@Param("depname") String name);
 
-    @Procedure(name = "entitybyDepartment")
-    public List<EmployeeEntity> ListEmployeesEntityInDepartment(@Param("depname") String name);
+//    @Procedure(name = "entitybyDepartment")
+//    public List<EmployeeEntity> ListEmployeesEntityInDepartment(@Param("depname") String name);
+    @Procedure(name = "employeesByDepartmentID")
+    public List<EmployeeEntity> employeesByDepartmentID(@Param("depId") Integer id);
+
+
+
+
 }

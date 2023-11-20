@@ -204,12 +204,29 @@ public class EmployeeCService implements EmployeeService {
 //
 //    }
 
+//    @Override
+//    @Transactional
+//    public List<EmployeeDTO> ListEmployeesByDepartment(String name) // List of Employees By Department
+//    {
+//
+//        List<EmployeeEntity> entityList = empRepo.ListEmployeesEntityInDepartment(name);
+//        List<EmployeeDTO> employeeDTOS = new ArrayList<>();
+//        for(EmployeeEntity entity : entityList)
+//        {
+//            employeeDTOS.add(empMap.empDTO(entity));
+//        }
+//        return employeeDTOS;
+//
+//
+//
+//    }
+
     @Override
     @Transactional
-    public List<EmployeeDTO> ListEmployeesByDepartment(String name) // List of Employees By Department
+    public List<EmployeeDTO> ListEmployeesByDepartment(Integer id) // List of Employees By Department
     {
 
-        List<EmployeeEntity> entityList = empRepo.ListEmployeesEntityInDepartment(name);
+        List<EmployeeEntity> entityList = empRepo.employeesByDepartmentID(id);
         List<EmployeeDTO> employeeDTOS = new ArrayList<>();
         for(EmployeeEntity entity : entityList)
         {
