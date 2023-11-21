@@ -22,7 +22,7 @@ Drop Procedure if exists CheckLeaveTypeNameExist ;
 Delimiter @@
 Create Procedure CheckLeaveTypeNameExist(IN nameLeave VARCHAR(255))
 Begin
-SELECT name 
+SELECT * 
 FROM managementsystem.leavetype
 Where name = nameLeave ;
 End @@
