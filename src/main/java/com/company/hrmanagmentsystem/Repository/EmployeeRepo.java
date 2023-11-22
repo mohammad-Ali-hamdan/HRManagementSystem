@@ -29,6 +29,10 @@ public interface EmployeeRepo extends JpaRepository<EmployeeEntity , Integer> {
 //    public List<EmployeeEntity> ListEmployeesEntityInDepartment(@Param("depname") String name);
     @Procedure(name = "employeesByDepartmentID")
     public List<EmployeeEntity> employeesByDepartmentID(@Param("depId") Integer id);
+    @Query(nativeQuery = true , value = "Select * From  managementsystem.employee Where department_id = :depId")
+    public List<EmployeeEntity> listEmployeeByDepId(@Param("depId") Integer depId);
+    @Query(nativeQuery = true , value = "Select name From  managementsystem.employee Where department_id = :depId")
+    public List<String> namesOfEmployeeInDepartment(@Param("depId") Integer depId);
 
 
 

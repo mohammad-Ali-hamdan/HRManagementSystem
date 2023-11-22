@@ -2,6 +2,7 @@ package com.company.hrmanagmentsystem.Controller;
 
 import com.company.hrmanagmentsystem.Service.DepartmentService;
 import com.company.hrmanagmentsystem.model.DepartmentDTO;
+import com.company.hrmanagmentsystem.model.DepartmentEmployeeDTO;
 import com.company.hrmanagmentsystem.model.EmployeeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,7 +61,24 @@ public class DepartmentController {
 
 
 
+    @GetMapping("/getemployeesByDepartment")
+    public ResponseEntity<List<DepartmentDTO>> getemployeesByAllDepartment()  // Get list of departments with All list pf Employess
+    {
+        return new ResponseEntity<List<DepartmentDTO>>( depService.getemployeesByAllDepartment(),  HttpStatus.OK) ;
+    }
 
+    @GetMapping("/getAllEmployeeInDepartment/{id}")
+    public ResponseEntity<DepartmentEmployeeDTO> getAllEmployeeNamesInSpecificDepartment(@PathVariable Integer id)
+    {
+
+        return new ResponseEntity<DepartmentEmployeeDTO>(depService.getAllEmployeeNamesInSpecificDepartment(id) ,  HttpStatus.OK) ;
+    }
+
+    @GetMapping("/getAllEmployeesEntityInSpecificDepartment/{id}")
+    public ResponseEntity<DepartmentDTO> getAllEmployeesEntityInSpecificDepartment(@PathVariable Integer id)
+    {
+        return new ResponseEntity<>(depService.getAllEmployeesEntityInSpecificDepartment(id) , HttpStatus.OK);
+    }
 
 
 }

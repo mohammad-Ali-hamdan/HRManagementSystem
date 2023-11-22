@@ -1,15 +1,14 @@
 package com.company.hrmanagmentsystem.model;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.List;
 
 @Data
-public class DepartmentDTO {
+public class DepartmentEmployeeDTO {
     private int id;
     private String name;
-    private List<EmployeeDTO> empList;
-
+    private List<String> namesOfEmployees;
 }
