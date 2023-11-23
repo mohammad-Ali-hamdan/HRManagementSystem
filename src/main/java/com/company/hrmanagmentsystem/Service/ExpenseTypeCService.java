@@ -57,7 +57,6 @@ public class ExpenseTypeCService implements ExpenseTypeService{
     }
 
     @Override
-    @Transactional
     public ExpenseTypeDTO createExpanseType(ExpenseTypeDTO DTO)
     {
         if(expTypeRepo.CheckExist(DTO.getName()).isEmpty()) // not exist before

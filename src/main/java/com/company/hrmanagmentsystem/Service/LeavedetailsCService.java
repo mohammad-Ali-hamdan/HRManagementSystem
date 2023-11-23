@@ -98,10 +98,13 @@ public class LeavedetailsCService implements LeavedetailsService{
             field.setAccessible(true);
             //ReflectionUtils.setField(field , entity , v);
             // I get error as field  Date.Sql so convert it to Date.Sql
-            if (field.getType() == java.sql.Date.class) {
+            if (field.getType() == java.sql.Date.class)
+            {
                 java.sql.Date dateValue = java.sql.Date.valueOf((String) v);
                 ReflectionUtils.setField(field, entity, dateValue);
-            } else {
+            }
+            else
+            {
                 ReflectionUtils.setField(field, entity, v);
             }
 
