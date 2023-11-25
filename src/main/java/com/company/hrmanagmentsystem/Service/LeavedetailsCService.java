@@ -71,18 +71,20 @@ public class LeavedetailsCService implements LeavedetailsService{
     @Transactional
     public LeavedetailsDTO SubmitLeave(LeavedetailsDTO leavedetailsDTO)
     {
-        LeavedetailsDTO DTO = new LeavedetailsDTO();
-        //checking if already exist:
+
+
         if (leavedetailsRepo.CheckLeaveExist(leavedetailsDTO.getId()) == null)
         {
+            LeavedetailsDTO DTO = new LeavedetailsDTO();
             LeavedetailsEntity1 leavedetailsEntity1 =  leavedetailsMapper.leavedetailsEntity(leavedetailsDTO);
             Integer id = leavedetailsRepo.getMaxleavedetailsID() + 1;
             leavedetailsEntity1.setId(id);
             leavedetailsRepo.save(leavedetailsEntity1);
             DTO =  leavedetailsMapper.leavedetailsDTO(leavedetailsEntity1);
-
+            return DTO;
         }
-        return DTO;
+        else return null;
+
 
     }
 
