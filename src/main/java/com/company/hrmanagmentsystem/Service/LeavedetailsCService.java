@@ -134,25 +134,61 @@ public class LeavedetailsCService implements LeavedetailsService{
 
     }
     @Override
-    public List<LeavedetailsDTO> getLeavePagination(Integer pageNumber, Integer pageSize,
-                                                        Integer employeeId , Integer leavetypeId )
-    {
-        Pageable pageable = null;
-        pageable = PageRequest.of(pageNumber, pageSize);
-        //List<LeavedetailsEntity1> pagelist =  pageRepo.findAll(pageable).getContent();
-        Page<LeavedetailsEntity1> pagelist =  pageRepo.findAll(pageable);
+    public List<LeavedetailsDTO> getLeavePagination(Integer pageNumber, Integer pageSize, Integer employeeId , Integer leavetypeId ) {
+
+        //Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        List<LeavedetailsEntity1> filteredList = leavedetailsRepo.getLeavedetailsbyEmp(employeeId, leavetypeId);
         List<LeavedetailsDTO> DTOS = new ArrayList<>();
-        List<LeavedetailsEntity1> filteredList =  pagelist.stream().filter(x->
-                (x.getLeavetype() == leavetypeId && x.getEmployee() == employeeId))
-                .collect(Collectors.toList());
+        for (LeavedetailsEntity1 entity : filteredList) {
+            DTOS.add(leavedetailsMapper.leavedetailsDTO(entity));
+        }
+        int start = pageNumber * pageSize;
+        int end = Math.min(start + pageSize, DTOS.size());
+        return DTOS.subList(start, end);
+    }
+
+    @Override
+    public List<LeavedetailsDTO> getLeavePagination2(Integer pageNumber, Integer pageSize,Integer employeeId , Integer leavetypeId )
+    {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<LeavedetailsEntity1> filteredList = leavedetailsRepo.findByEmpIdLeaveId(employeeId , leavetypeId , pageable );
+        List<LeavedetailsDTO> DTOS = new ArrayList<>();
         for(LeavedetailsEntity1 entity: filteredList)
         {
             DTOS.add(leavedetailsMapper.leavedetailsDTO(entity));
         }
-        //Page<LeavedetailsDTO> result = Page.empty(DTOS);
         return DTOS;
-
     }
+
+
+
+        //Pageable pageable = null;
+
+//        Page<LeavedetailsEntity1> pagelist =  pageRepo.findAll(pageable);
+//        List<LeavedetailsDTO> DTOS = new ArrayList<>();
+//
+//
+//        List<LeavedetailsEntity1> filteredList =  pagelist.stream().filter(x->
+//                (x.getLeavetype() == leavetypeId && x.getEmployee() == employeeId))
+//                .collect(Collectors.toList());
+        //Page<LeavedetailsEntity1> page = leavedetailsRepo.getLeavedetailsbyEmp(employeeId, leavetypeId, (java.awt.print.Pageable) pageable);
+        //List<LeavedetailsEntity1> pagelist =  pageRepo.findAll(pageable).getContent();
+
+        //List<LeavedetailsEntity1> pagelist = leavedetailsRepo.getLeavedetailsbyEmp(employeeId ,leavetypeId , pageable);
+//
+//        List<LeavedetailsEntity1> filteredList = pagelist.stream().filter(x ->
+//                Objects.equals(x.getLeavetype(), leavetypeId) &&   Objects.equals(x.getEmployee(), employeeId)).collect(Collectors.toList());
+
+
+
+//        for(LeavedetailsEntity1 entity: filteredList)
+//        {
+//            DTOS.add(leavedetailsMapper.leavedetailsDTO(entity));
+//        }
+//        //Page<LeavedetailsDTO> result = Page.empty(DTOS);
+//        return DTOS;
+
+
 
 
 

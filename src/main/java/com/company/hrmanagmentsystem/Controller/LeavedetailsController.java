@@ -25,7 +25,7 @@ public class LeavedetailsController {
         if(!DTOS.isEmpty())
             return new ResponseEntity<>(DTOS , HttpStatus.OK);
         else
-            return new ResponseEntity<>(null , HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null , HttpStatus.OK);
     }
     @GetMapping("/getbyId/{id}")
     public ResponseEntity<LeavedetailsDTO> getbyId(@PathVariable Integer id)
@@ -34,7 +34,7 @@ public class LeavedetailsController {
      if(DTO != null)
          return new ResponseEntity<>(DTO , HttpStatus.OK);
      else
-         return new ResponseEntity<>(null , HttpStatus.NOT_FOUND);
+         return new ResponseEntity<>(null , HttpStatus.OK);
     }
 
     @DeleteMapping("/deletebyId/{id}")
@@ -44,7 +44,7 @@ public class LeavedetailsController {
        if(isDeleted)
            return new ResponseEntity<>("Deleted" , HttpStatus.OK);
        else
-           return new ResponseEntity<>("Id not exist. Failed to Delete" , HttpStatus.NOT_FOUND);
+           return new ResponseEntity<>("Id not exist. Failed to Delete" , HttpStatus.OK);
     }
     @PatchMapping("/updateLeavedetails")
     public ResponseEntity<?> updateLeaveDetails(@RequestBody Map<String , Object> DtOToUpdate)
@@ -53,17 +53,17 @@ public class LeavedetailsController {
         if(DTO !=null)
             return new ResponseEntity<>(DTO , HttpStatus.OK);
         else
-            return new ResponseEntity<>("Failed To Update" , HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Failed To Update" , HttpStatus.OK);
     }
 
     @PostMapping("/SubmitLeave")
-    public ResponseEntity<LeavedetailsDTO> SubmitLeave(@RequestBody LeavedetailsDTO leavedetailsDTO)
+    public ResponseEntity<?> SubmitLeave(@RequestBody LeavedetailsDTO leavedetailsDTO)
     {
         LeavedetailsDTO DTO =  service.SubmitLeave(leavedetailsDTO);
         if(DTO != null)
             return new ResponseEntity<>(DTO , HttpStatus.OK);
         else
-            return new ResponseEntity<>(null , HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Duplicate id" , HttpStatus.OK);
     }
 
     @PostMapping("/getleaveEmployeeRange")
@@ -77,14 +77,36 @@ public class LeavedetailsController {
          if(!DTOS.isEmpty())
              return new ResponseEntity<>(DTOS , HttpStatus.OK);
          else
-             return new ResponseEntity<>(null , HttpStatus.NOT_FOUND);
+             return new ResponseEntity<>(null , HttpStatus.OK);
     }
 
+//    @GetMapping("/listpagination")
+//    public ResponseEntity<List<LeavedetailsDTO>> Pagination(Integer  pageSize  , Integer pageNumber,
+//    Integer employee , Integer leave)
+//    {
+//        List<LeavedetailsDTO> DTOS = service.getLeavePagination(pageNumber , pageSize , employee ,leave);
+//        return new ResponseEntity<>(DTOS , HttpStatus.OK);
+//    }
+
     @GetMapping("/listpagination")
-    public ResponseEntity<List<LeavedetailsDTO>> Pagination(Integer pageSize  , Integer pageNumber,
-    Integer employee , Integer leave)
+    public ResponseEntity<List<LeavedetailsDTO>> Pagination(@RequestBody Map<String , Object> pageable    )
     {
+        Integer  pageSize = (Integer) pageable.get("pageSize");
+        Integer  pageNumber = (Integer) pageable.get("pageNumber");
+        Integer  employee = (Integer) pageable.get("employee");
+        Integer  leave = (Integer) pageable.get("leave");
         List<LeavedetailsDTO> DTOS = service.getLeavePagination(pageNumber , pageSize , employee ,leave);
+        return new ResponseEntity<>(DTOS , HttpStatus.OK);
+    }
+
+    @GetMapping("/listpagination2")
+    public ResponseEntity<List<LeavedetailsDTO>> Pagination2(@RequestBody Map<String , Object> pageable    )
+    {
+        Integer  pageSize = (Integer) pageable.get("pageSize");
+        Integer  pageNumber = (Integer) pageable.get("pageNumber");
+        Integer  employee = (Integer) pageable.get("employee");
+        Integer  leave = (Integer) pageable.get("leave");
+        List<LeavedetailsDTO> DTOS = service.getLeavePagination2(pageNumber , pageSize , employee ,leave);
         return new ResponseEntity<>(DTOS , HttpStatus.OK);
     }
 

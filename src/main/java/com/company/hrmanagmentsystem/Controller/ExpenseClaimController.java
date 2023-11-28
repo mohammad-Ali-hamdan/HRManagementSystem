@@ -1,6 +1,7 @@
 package com.company.hrmanagmentsystem.Controller;
 
 import com.company.hrmanagmentsystem.Service.ExpenseClaimService;
+import com.company.hrmanagmentsystem.model.EmployeeExpenseClaimsDTO;
 import com.company.hrmanagmentsystem.model.ExpenseClaimDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -94,5 +95,15 @@ public class ExpenseClaimController {
             return new ResponseEntity<>(DTOS , HttpStatus.OK);
         else
         return new ResponseEntity<>("No claims for this employee" , HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllClaimsPerEmployee/{id}")
+    public ResponseEntity<?> getAllClaimsWithDetailsPerEmployee(@PathVariable Integer id)
+    {
+        EmployeeExpenseClaimsDTO DTO = service.getAllClaimsWithDetailsPerEmployee(id);
+        if(DTO != null)
+            return new ResponseEntity<>(DTO , HttpStatus.OK);
+        else
+            return new ResponseEntity<>("Invalid id " , HttpStatus.OK);
     }
 }

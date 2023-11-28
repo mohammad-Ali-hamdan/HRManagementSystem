@@ -1,9 +1,16 @@
 package com.company.hrmanagmentsystem.Service;
 
+import com.company.hrmanagmentsystem.Entity.EmployeeEntity;
 import com.company.hrmanagmentsystem.Entity.ExpenseClaimEntity;
+import com.company.hrmanagmentsystem.Entity.ExpenseClaimEntryEntity;
+import com.company.hrmanagmentsystem.Mapper.EmployeeMapper;
+import com.company.hrmanagmentsystem.Mapper.ExpenseClaimEntryMapper;
 import com.company.hrmanagmentsystem.Mapper.ExpenseClaimMapper;
+import com.company.hrmanagmentsystem.Repository.EmployeeRepo;
 import com.company.hrmanagmentsystem.Repository.ExpenseClaimEntryRepo;
 import com.company.hrmanagmentsystem.Repository.ExpenseClaimRepo;
+import com.company.hrmanagmentsystem.model.EmployeeDTO;
+import com.company.hrmanagmentsystem.model.EmployeeExpenseClaimsDTO;
 import com.company.hrmanagmentsystem.model.ExpenseClaimDTO;
 import com.company.hrmanagmentsystem.model.ExpenseClaimEntryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +27,9 @@ public class ExpenseClaimCService implements ExpenseClaimService{
     @Autowired private ExpenseClaimRepo repo;
     @Autowired private ExpenseClaimMapper mapper;
     @Autowired private ExpenseClaimEntryRepo expenseClaimEntryRepo;
+    @Autowired private EmployeeRepo employeeRepo;
+    @Autowired private EmployeeMapper empMapper;
+    @Autowired private ExpenseClaimEntryMapper expenseClaimEntryMapper;
 
 
     @Override
@@ -210,5 +220,37 @@ public class ExpenseClaimCService implements ExpenseClaimService{
             return DTOS;
         }
         else return null;
+    }
+
+
+    @Override
+    public EmployeeExpenseClaimsDTO getAllClaimsWithDetailsPerEmployee(Integer id)
+    {
+        Optional<EmployeeEntity> employeeEntityOptional =  employeeRepo.findById(id);
+        if(employeeEntityOptional.isPresent())
+        {
+            EmployeeExpenseClaimsDTO DTO = empMapper.empExpenseDTO(employeeEntityOptional.get());
+            List<ExpenseClaimEntity> expenseClaimEntityList = repo.getExpenseClaimPerEmployee(id);
+            List<ExpenseClaimDTO> claimDTOS = new ArrayList<>();
+            for(ExpenseClaimEntity expenseClaimEntity : expenseClaimEntityList)
+            {
+                claimDTOS.add(mapper.DTO(expenseClaimEntity));
+            }
+            for(ExpenseClaimDTO claimDTO : claimDTOS)
+            {
+                List<ExpenseClaimEntryEntity> expenseClaimEntryEntityList = expenseClaimEntryRepo.AllExpensesPerClaim(claimDTO.getId());
+                List<ExpenseClaimEntryDTO> expenseClaimEntryDTOList = new ArrayList<>();
+                for(ExpenseClaimEntryEntity entity : expenseClaimEntryEntityList)
+                {
+                    expenseClaimEntryDTOList.add(expenseClaimEntryMapper.expClaimEntryDTO(entity));
+                }
+                claimDTO.setExpenseEntryList(expenseClaimEntryDTOList);
+            }
+            DTO.setExpenseTotal(claimDTOS);
+            return DTO;
+
+        }
+        else    return null;
+
     }
 }

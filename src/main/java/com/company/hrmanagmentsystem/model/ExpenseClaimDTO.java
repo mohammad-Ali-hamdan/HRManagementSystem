@@ -6,6 +6,7 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.List;
 
 @Data
 public class ExpenseClaimDTO {
@@ -15,6 +16,8 @@ public class ExpenseClaimDTO {
     private Double total;
     private String status;
     private int employeeId;
+
+    private List<ExpenseClaimEntryDTO> expenseEntryList;
 
 
 }
