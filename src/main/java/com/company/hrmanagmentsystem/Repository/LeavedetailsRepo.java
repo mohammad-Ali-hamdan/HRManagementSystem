@@ -14,13 +14,13 @@ import java.util.List;
 
 public interface LeavedetailsRepo extends JpaRepository<LeavedetailsEntity1, Integer> {
     //checking if exist:
-    @Procedure(name = "CheckLeaveExist")
+    @Query(nativeQuery = true , value = "SELECT id  FROM managementsystem.leavedetails Where id = :idi")
     public Integer CheckLeaveExist(@Param("idi") Integer id);
     //get leave by date and employee
-    @Procedure(name = "SearchforleavesFromTo")
-    public List<LeavedetailsEntity1> SearchforleavesFromTo(@Param("datefrom")Date datefrom , @Param("dateto") Date dateto , @Param("employee_id")  Integer employee_id);
+    @Query(nativeQuery = true , value = "Select * From managementsystem.leavedetails Where (fromdate >= :datefrom && Todate<= :dateto && employee = :empId ) ")
+    public List<LeavedetailsEntity1> SearchforleavesFromTo(@Param("datefrom")Date datefrom , @Param("dateto") Date dateto , @Param("empId")  Integer empId);
     //max id
-    @Procedure(name="getMaxleavedetailsID")
+    @Query(nativeQuery = true , value = "SELECT MAX(id) FROM managementsystem.leavedetails")
     public Integer getMaxleavedetailsID();
 
     @Query(nativeQuery = true , value = "Select * from managementsystem.leavedetails Where employee =  :empId  && leavetype = :leaveId")

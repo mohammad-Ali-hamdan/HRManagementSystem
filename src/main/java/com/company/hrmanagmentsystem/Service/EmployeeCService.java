@@ -58,19 +58,10 @@ public class EmployeeCService implements EmployeeService {
     }
 
     @Override
-    @Transactional
     public EmployeeDTO CreateEmployee(EmployeeDTO employeeDTOInput) // Create a new Employee
     {
         employeeDTOInput.setId(empRepo.GetMaxEmpId() + 1);
-        boolean IsExistDepartment = false;
-        for(Integer departmentId : empRepo.departmentIDs())
-        {
-            if(employeeDTOInput.getDepartmentId() == departmentId)
-            {
-                IsExistDepartment = true;
-                break;
-            }
-        }
+        boolean IsExistDepartment =  depRepo.existsById(employeeDTOInput.getDepartmentId());
         if (IsExistDepartment)
         {
             EmployeeEntity employeeEntity = empMap.empEntity(employeeDTOInput);
@@ -102,18 +93,10 @@ public class EmployeeCService implements EmployeeService {
     }
 
     @Override
-    @Transactional
     public EmployeeDTO updateEmp(Map<String , Object> dtoObject , Integer id ) // Update Employee using ReflectionUtils
     {
-        boolean IsExistDepartment = false;
-        for(Integer departmentId : empRepo.departmentIDs())
-        {
-            if(dtoObject.get("departmentId") == departmentId)
-            {
-                IsExistDepartment = true;
-                break;
-            }
-        }
+        Integer depId = (Integer) dtoObject.get("departmentId");
+        boolean IsExistDepartment =  depRepo.existsById(depId);
         if(IsExistDepartment)
         {
             Optional<EmployeeEntity> employeeEntityOptional =  empRepo.findById(id);
@@ -141,88 +124,8 @@ public class EmployeeCService implements EmployeeService {
     }
 
 
-//    @Override
-//    @Transactional
-//    public List<EmployeeDTO> ListEmployeesByDepartment(String name) // List of Employees By Department
-//    {
-//
-//
-//       boolean IsDepartmentExist = false;
-//       for (String depName : depRepo.departmentNames())
-//       {
-//           if(depName.equalsIgnoreCase(name))
-//           {
-//               IsDepartmentExist = true ;
-//               break;
-//           }
-//       }
-//       if(IsDepartmentExist)
-//       {
-//           DepartmentEntity  departmentEntity = depRepo.findByName(name);
-//           Integer depId = departmentEntity.getId();
-//           List<EmployeeEntity> allemployees = empRepo.findAll();
-//           List<EmployeeDTO> employeeDTOS = new ArrayList<>();
-//           for(EmployeeEntity employeeEntity : allemployees)
-//           {
-//               if(employeeEntity.getDepartmentId() == depId)
-//               {
-//                   employeeDTOS.add(empMap.empDTO(employeeEntity));
-//               }
-//           }
-//
-//           return employeeDTOS ;
-//       }
-//       else return null;
-//
-//    }
-
-//    @Override
-//    @Transactional
-//    public List<EmployeeDTO> ListEmployeesByDepartment2(String name) //Another way of List of Employees By Department
-//    {
-//        boolean IsDepartmentExist = false;
-//        for (String depName : depRepo.departmentNames())
-//        {
-//            if(depName.equalsIgnoreCase(name))
-//            {
-//                IsDepartmentExist = true ;
-//                break;
-//            }
-//        }
-//        if(IsDepartmentExist)
-//        {
-//            List<Integer> ids = empRepo.ListEmployeesInDepartment(name);
-//            List<EmployeeDTO> employeeDTOS = new ArrayList<>();
-//            for(Integer id : ids)
-//            {
-//                employeeDTOS.add(empMap.empDTO(empRepo.findById(id).get()));
-//            }
-//            return employeeDTOS ;
-//        }
-//        else return null;
-//
-//
-//    }
-
-//    @Override
-//    @Transactional
-//    public List<EmployeeDTO> ListEmployeesByDepartment(String name) // List of Employees By Department
-//    {
-//
-//        List<EmployeeEntity> entityList = empRepo.ListEmployeesEntityInDepartment(name);
-//        List<EmployeeDTO> employeeDTOS = new ArrayList<>();
-//        for(EmployeeEntity entity : entityList)
-//        {
-//            employeeDTOS.add(empMap.empDTO(entity));
-//        }
-//        return employeeDTOS;
-//
-//
-//
-//    }
 
     @Override
-    @Transactional
     public List<EmployeeDTO> ListEmployeesByDepartment(Integer id) // List of Employees By Department
     {
 

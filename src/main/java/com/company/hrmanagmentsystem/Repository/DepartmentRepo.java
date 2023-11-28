@@ -10,12 +10,12 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface DepartmentRepo extends JpaRepository<DepartmentEntity, Integer> {
-    public DepartmentEntity findByName (String name);
-    @Procedure(name = "departmentNames")
+
+    @Query(nativeQuery = true , value = "Select name From managementsystem.department")
     public List<String> departmentNames();
-    @Procedure(name = "getMaxdepID")
+    @Query(nativeQuery = true , value = "SELECT MAX(id) FROM managementsystem.department")
     public Integer getMaxdepID();
-    @Procedure(name = "getAllDepartments")
+    @Query(nativeQuery = true , value = "Select name From managementsystem.department")
     public List<String> getAllDepartments();
 
 

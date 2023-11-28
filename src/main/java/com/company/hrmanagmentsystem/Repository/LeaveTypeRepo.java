@@ -11,12 +11,12 @@ import java.util.List;
 
 public interface LeaveTypeRepo extends JpaRepository<LeaveTypeEntity , Integer> {
 
-    @Procedure(name = "leaveTypeMaxID")
+    @Query(nativeQuery = true , value = "SELECT MAX(id) FROM managementsystem.leavetype")
     public Integer leaveTypeMaxID();
-    @Procedure(name = "CheckTypeExist")
+    @Query(nativeQuery = true , value = "SELECT id FROM managementsystem.leavetype Where id = :idi ")
     public List<Integer> CheckTypeExist(@Param("idi") Integer id);
     @Query(nativeQuery = true , value = "SELECT name From managementsystem.leavetype Where id = :typename")
     public String findTypeById(@Param("typename") Integer id);
-    @Procedure(name= "CheckLeaveTypeNameExist")
+    @Query(nativeQuery = true , value = "SELECT * FROM managementsystem.leavetype Where name = :nameLeave")
     public List<LeaveTypeEntity> CheckLeaveTypeNameExist(@Param("nameLeave") String name);
 }

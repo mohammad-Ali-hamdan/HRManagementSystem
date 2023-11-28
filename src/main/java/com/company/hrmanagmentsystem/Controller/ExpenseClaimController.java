@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.xml.transform.sax.SAXResult;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/apiExpenseClaim")
@@ -97,7 +98,7 @@ public class ExpenseClaimController {
         return new ResponseEntity<>("No claims for this employee" , HttpStatus.OK);
     }
 
-    @GetMapping("/getAllClaimsPerEmployee/{id}")
+    @GetMapping("/getAllClaimsPerEmployee/{id}") // All Claims per employee
     public ResponseEntity<?> getAllClaimsWithDetailsPerEmployee(@PathVariable Integer id)
     {
         EmployeeExpenseClaimsDTO DTO = service.getAllClaimsWithDetailsPerEmployee(id);
@@ -105,5 +106,26 @@ public class ExpenseClaimController {
             return new ResponseEntity<>(DTO , HttpStatus.OK);
         else
             return new ResponseEntity<>("Invalid id " , HttpStatus.OK);
+    }
+
+
+    @GetMapping("/getAllClaimsPerEmployeePerType") // each claim can has many expense types // All claims per employee and per type
+    public ResponseEntity<?> getAllClaimsPerEmployeePerType(@RequestBody Map<String , Object> body) // body : empId , claimType
+    {
+        List<ExpenseClaimDTO> DTOS =  service.getAllClaimsPerEmployeePerType(body);
+        if(DTOS !=null)
+            return new ResponseEntity<>(DTOS , HttpStatus.OK);
+        else
+            return new ResponseEntity<>("No claims of this claim type for this employee" , HttpStatus.OK);
+    }
+
+    @GetMapping("/getTotalPerEmployeePerType") // Total per Employee and per claim type
+    public ResponseEntity<?> getTotalPerEmployeePerType(@RequestBody Map<String , Object> body) // body : empId , claimType
+    {
+        Optional<Double> total = service.getTotalPerEmployeePerType(body);
+        if(total !=null)
+            return new ResponseEntity<>(total , HttpStatus.OK);
+        else
+            return new ResponseEntity<>("No claims of this claim type for this employee" , HttpStatus.OK);
     }
 }

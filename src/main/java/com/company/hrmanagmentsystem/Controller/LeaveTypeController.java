@@ -19,25 +19,25 @@ public class LeaveTypeController {
     private LeaveTypeService leaveTypeService ;
 
     @GetMapping("/getall")
-    public ResponseEntity<List<LeaveTypeDTO>> getallleaveType()
+    public ResponseEntity<?> getallleaveType()
     {
         List<LeaveTypeDTO> leaveTypeDTOS =  leaveTypeService.getall();
         if(!leaveTypeDTOS.isEmpty())
             return new ResponseEntity<List<LeaveTypeDTO>>(leaveTypeDTOS , HttpStatus.OK);
         else
-            return new ResponseEntity<List<LeaveTypeDTO>>(leaveTypeDTOS , HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null , HttpStatus.OK);
 
 
     }
 
     @GetMapping("/getbyid/{id}") // get department by Id
-    public ResponseEntity<LeaveTypeDTO> getbyid(@PathVariable Integer id) // get departments by id
+    public ResponseEntity<?> getbyid(@PathVariable Integer id) // get departments by id
     {
         LeaveTypeDTO leaveTypeDTO  =  leaveTypeService.getbyID(id);
         if(leaveTypeDTO != null)
             return new ResponseEntity<LeaveTypeDTO>(leaveTypeDTO , HttpStatus.OK);
         else
-            return new ResponseEntity<LeaveTypeDTO>(leaveTypeDTO , HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null , HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteleavetype/{id}") // Delete department
@@ -47,7 +47,7 @@ public class LeaveTypeController {
         if(isDeleted)
             return new ResponseEntity<String>("Deleted" , HttpStatus.OK);
         else
-            return new ResponseEntity<String>("Not exist , Failed to Delete" , HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("Not exist , Failed to Delete" , HttpStatus.OK);
 
     }
 
@@ -58,18 +58,18 @@ public class LeaveTypeController {
         if(leaveTypeDTO1 != null)
             return new ResponseEntity<LeaveTypeDTO>(leaveTypeDTO1 , HttpStatus.OK);
         else
-            return new ResponseEntity<>(null , HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Invalid id" , HttpStatus.OK);
 
     }
 
     @PatchMapping("/updateleavetype")
-    public ResponseEntity<LeaveTypeDTO> updateLeaveType(@RequestBody Map<String , Object> leaveTypeDTO)
+    public ResponseEntity<?> updateLeaveType(@RequestBody Map<String , Object> leaveTypeDTO)
     {
         LeaveTypeDTO DTO =  leaveTypeService.Update(leaveTypeDTO);
         if(DTO != null)
             return new ResponseEntity<>(DTO , HttpStatus.OK);
         else
-            return new ResponseEntity<>(null , HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Invalid id " , HttpStatus.OK);
     }
 
 }

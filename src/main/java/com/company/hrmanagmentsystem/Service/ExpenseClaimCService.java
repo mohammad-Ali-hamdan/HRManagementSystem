@@ -253,4 +253,28 @@ public class ExpenseClaimCService implements ExpenseClaimService{
         else    return null;
 
     }
+    @Override
+    public List<ExpenseClaimDTO> getAllClaimsPerEmployeePerType(Map<String , Object>  body)
+    {
+        Integer empId = (Integer) body.get("empId");
+        Integer claimType = (Integer) body.get("claimType");
+        List<ExpenseClaimEntity> expenseClaimEntityList  = repo.getAllClaimsPerEmployeePerType(empId , claimType);
+        List<ExpenseClaimDTO> DTOS = new ArrayList<>();
+        for(ExpenseClaimEntity entity : expenseClaimEntityList)
+        {
+            DTOS.add(mapper.DTO(entity));
+        }
+        return DTOS;
+    }
+
+    @Override
+    public Optional<Double>  getTotalPerEmployeePerType(Map<String , Object>  body)
+    {
+        Integer empId = (Integer) body.get("empId");
+        Integer claimType = (Integer) body.get("claimType");
+        Optional<Double>  total  = repo.getTotalPerEmployeePerType(empId , claimType);
+        return total;
+    }
+
+
 }

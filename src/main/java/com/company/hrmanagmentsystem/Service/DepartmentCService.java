@@ -56,21 +56,20 @@ public class DepartmentCService implements DepartmentService{
 
 
     @Override
-    @Transactional
     public DepartmentDTO createDepartment(DepartmentDTO departmentDTO)
     {
         List<String> departmentNames = depRepo.departmentNames();// check if department exist
         String name = departmentDTO.getName();
-        boolean IsExistDepartment = false;
-        for (String depname : departmentNames)
+        boolean isExistDepartment = false;
+        for (String depName : departmentNames)
         {
-            if(depname.equalsIgnoreCase(name))
+            if(depName.equalsIgnoreCase(name))
             {
-                IsExistDepartment = true;
+                isExistDepartment = true;
                 break;
             }
         }
-        if(!IsExistDepartment)
+        if(!isExistDepartment)
         {
             Integer id = depRepo.getMaxdepID() + 1 ;
             DepartmentEntity departmentEntity =  depMap.depEntity(departmentDTO);
@@ -100,31 +99,6 @@ public class DepartmentCService implements DepartmentService{
 
     }
 
-//    @Override
-//    public List<DepartmentDTO> getemployeesByAllDepartment() // Get All employess in All Department
-//    {
-//        List<DepartmentEntity> listDepartments = depRepo.findAll();
-//        List<DepartmentDTO> DTOs = new ArrayList<>();
-//        for(DepartmentEntity entity:listDepartments)
-//        {
-//            DepartmentDTO DTO = new DepartmentDTO();
-//            DTO.setId(entity.getId());
-//            DTO.setName(entity.getName());
-//            List<EmployeeEntity> employeeEntityList =  emprepo.listEmployeeByDepId(entity.getId());
-//            List<EmployeeDTO> EmpDTOS = new ArrayList<>();
-//            for(EmployeeEntity entity1 :employeeEntityList )
-//            {
-//             EmpDTOS.add(empMap.empDTO(entity1))  ;
-//            }
-//            DTO.setEmpList(EmpDTOS);
-//            DTOs.add(DTO);
-//        }
-//        return DTOs;
-//
-//
-//
-//    }
-
     @Override
     public List<DepartmentDTO> getemployeesByAllDepartment() // Get All employess in All Department
     {
@@ -132,16 +106,16 @@ public class DepartmentCService implements DepartmentService{
         List<DepartmentDTO> departmentDTOList = new ArrayList<>();
         for(DepartmentEntity entity:departmentEntityList)
         {
-            DepartmentDTO DTO = depMap.depDTO(entity);
-            Integer id = DTO.getId();
+            DepartmentDTO dto = depMap.depDTO(entity);
+            Integer id = dto.getId();
             List<EmployeeEntity> employeeEntityList = emprepo.listEmployeeByDepId(id);
             List<EmployeeDTO> employeeDTOList = new ArrayList<>();
             for(EmployeeEntity employeeEntity :employeeEntityList)
             {
                 employeeDTOList.add(empMap.empDTO(employeeEntity));
             }
-            DTO.setEmpList(employeeDTOList);
-            departmentDTOList.add(DTO);
+            dto.setEmpList(employeeDTOList);
+            departmentDTOList.add(dto);
         }
         return departmentDTOList;
     }
@@ -150,10 +124,10 @@ public class DepartmentCService implements DepartmentService{
     public DepartmentEmployeeDTO getAllEmployeeNamesInSpecificDepartment(Integer id)
     {
         DepartmentEntity departmentEntity = depRepo.findById(id).get();
-        DepartmentEmployeeDTO DTO =  depMap.depEmpDTO(departmentEntity);
+        DepartmentEmployeeDTO dto =  depMap.depEmpDTO(departmentEntity);
         List<String> names = emprepo.namesOfEmployeeInDepartment(id);
-        DTO.setNamesOfEmployees(names);
-        return DTO;
+        dto.setNamesOfEmployees(names);
+        return dto;
     }
 
     @Override
@@ -168,9 +142,9 @@ public class DepartmentCService implements DepartmentService{
         Optional<DepartmentEntity> optionalDepartmentEntity = depRepo.findById(id);
         if(optionalDepartmentEntity.isPresent())
         {
-            DepartmentDTO DTO = depMap.depDTO(optionalDepartmentEntity.get());
-            DTO.setEmpList(listOfEmployeeDTOInDepartment);
-            return DTO;
+            DepartmentDTO dto = depMap.depDTO(optionalDepartmentEntity.get());
+            dto.setEmpList(listOfEmployeeDTOInDepartment);
+            return dto;
         }
         return null;
     }

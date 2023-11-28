@@ -21,18 +21,18 @@ public class LeavedetailsController {
     @GetMapping("/getall")
     public ResponseEntity<List<LeavedetailsDTO>> getall()
     {
-        List<LeavedetailsDTO> DTOS = service.getall();
-        if(!DTOS.isEmpty())
-            return new ResponseEntity<>(DTOS , HttpStatus.OK);
+        List<LeavedetailsDTO> dtos = service.getall();
+        if(!dtos.isEmpty())
+            return new ResponseEntity<>(dtos , HttpStatus.OK);
         else
             return new ResponseEntity<>(null , HttpStatus.OK);
     }
     @GetMapping("/getbyId/{id}")
     public ResponseEntity<LeavedetailsDTO> getbyId(@PathVariable Integer id)
     {
-     LeavedetailsDTO DTO =  service.getbyId(id);
-     if(DTO != null)
-         return new ResponseEntity<>(DTO , HttpStatus.OK);
+     LeavedetailsDTO dto =  service.getbyId(id);
+     if(dto != null)
+         return new ResponseEntity<>(dto , HttpStatus.OK);
      else
          return new ResponseEntity<>(null , HttpStatus.OK);
     }
@@ -47,11 +47,11 @@ public class LeavedetailsController {
            return new ResponseEntity<>("Id not exist. Failed to Delete" , HttpStatus.OK);
     }
     @PatchMapping("/updateLeavedetails")
-    public ResponseEntity<?> updateLeaveDetails(@RequestBody Map<String , Object> DtOToUpdate)
+    public ResponseEntity<?> updateLeaveDetails(@RequestBody Map<String , Object> dtObject)
     {
-        LeavedetailsDTO DTO = service.updateLeaveDetails(DtOToUpdate);
-        if(DTO !=null)
-            return new ResponseEntity<>(DTO , HttpStatus.OK);
+        LeavedetailsDTO dto = service.updateLeaveDetails(dtObject);
+        if(dto !=null)
+            return new ResponseEntity<>(dto , HttpStatus.OK);
         else
             return new ResponseEntity<>("Failed To Update" , HttpStatus.OK);
     }
@@ -59,34 +59,28 @@ public class LeavedetailsController {
     @PostMapping("/SubmitLeave")
     public ResponseEntity<?> SubmitLeave(@RequestBody LeavedetailsDTO leavedetailsDTO)
     {
-        LeavedetailsDTO DTO =  service.SubmitLeave(leavedetailsDTO);
-        if(DTO != null)
-            return new ResponseEntity<>(DTO , HttpStatus.OK);
+        LeavedetailsDTO dto =  service.SubmitLeave(leavedetailsDTO);
+        if(dto != null)
+            return new ResponseEntity<>(dto , HttpStatus.OK);
         else
             return new ResponseEntity<>("Duplicate id" , HttpStatus.OK);
     }
 
     @PostMapping("/getleaveEmployeeRange")
-    public ResponseEntity<List<LeavedetailsDTO>> getLeaveEmployeeWithinRange(@RequestBody LeaveEmployeeDTO DTO)
+    public ResponseEntity<List<LeavedetailsDTO>> getLeaveEmployeeWithinRange(@RequestBody LeaveEmployeeDTO dto) // employeeId,FromDate,ToDate
     {
 
-         Integer employeeId =  DTO.getEmployeeId();
-         Date FromDate = DTO.getFromDate();
-         Date ToDate = DTO.getToDate();
-         List<LeavedetailsDTO> DTOS = service.getLeaveEmployeeWithinRange(employeeId , FromDate , ToDate);
-         if(!DTOS.isEmpty())
-             return new ResponseEntity<>(DTOS , HttpStatus.OK);
+         Integer employeeId =  dto.getEmployeeId();
+         Date fromDate = dto.getFromDate();
+         Date toDate = dto.getToDate();
+         List<LeavedetailsDTO> dtos = service.getLeaveEmployeeWithinRange(employeeId , fromDate , toDate);
+         if(!dtos.isEmpty())
+             return new ResponseEntity<>(dtos , HttpStatus.OK);
          else
              return new ResponseEntity<>(null , HttpStatus.OK);
     }
 
-//    @GetMapping("/listpagination")
-//    public ResponseEntity<List<LeavedetailsDTO>> Pagination(Integer  pageSize  , Integer pageNumber,
-//    Integer employee , Integer leave)
-//    {
-//        List<LeavedetailsDTO> DTOS = service.getLeavePagination(pageNumber , pageSize , employee ,leave);
-//        return new ResponseEntity<>(DTOS , HttpStatus.OK);
-//    }
+
 
     @GetMapping("/listpagination")
     public ResponseEntity<List<LeavedetailsDTO>> Pagination(@RequestBody Map<String , Object> pageable    )
@@ -95,8 +89,8 @@ public class LeavedetailsController {
         Integer  pageNumber = (Integer) pageable.get("pageNumber");
         Integer  employee = (Integer) pageable.get("employee");
         Integer  leave = (Integer) pageable.get("leave");
-        List<LeavedetailsDTO> DTOS = service.getLeavePagination(pageNumber , pageSize , employee ,leave);
-        return new ResponseEntity<>(DTOS , HttpStatus.OK);
+        List<LeavedetailsDTO> dtos = service.getLeavePagination(pageNumber , pageSize , employee ,leave);
+        return new ResponseEntity<>(dtos , HttpStatus.OK);
     }
 
     @GetMapping("/listpagination2")
@@ -106,8 +100,8 @@ public class LeavedetailsController {
         Integer  pageNumber = (Integer) pageable.get("pageNumber");
         Integer  employee = (Integer) pageable.get("employee");
         Integer  leave = (Integer) pageable.get("leave");
-        List<LeavedetailsDTO> DTOS = service.getLeavePagination2(pageNumber , pageSize , employee ,leave);
-        return new ResponseEntity<>(DTOS , HttpStatus.OK);
+        List<LeavedetailsDTO> dtos = service.getLeavePagination2(pageNumber , pageSize , employee ,leave);
+        return new ResponseEntity<>(dtos , HttpStatus.OK);
     }
 
 

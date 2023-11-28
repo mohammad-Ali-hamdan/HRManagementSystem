@@ -48,8 +48,8 @@ public class LeavedetailsCService implements LeavedetailsService{
         Optional<LeavedetailsEntity1> leavedetailsEntity1Optional = leavedetailsRepo.findById(id);
         if(leavedetailsEntity1Optional.isPresent())
         {
-            LeavedetailsDTO DTO = leavedetailsMapper.leavedetailsDTO(leavedetailsEntity1Optional.get());
-            return DTO;
+            LeavedetailsDTO dto = leavedetailsMapper.leavedetailsDTO(leavedetailsEntity1Optional.get());
+            return dto;
         }
         return null;
     }
@@ -68,20 +68,19 @@ public class LeavedetailsCService implements LeavedetailsService{
     }
 
     @Override
-    @Transactional
     public LeavedetailsDTO SubmitLeave(LeavedetailsDTO leavedetailsDTO)
     {
 
 
-        if (leavedetailsRepo.CheckLeaveExist(leavedetailsDTO.getId()) == null)
+        if (!leavedetailsRepo.existsById(leavedetailsDTO.getId()))
         {
-            LeavedetailsDTO DTO = new LeavedetailsDTO();
+            LeavedetailsDTO dto = new LeavedetailsDTO();
             LeavedetailsEntity1 leavedetailsEntity1 =  leavedetailsMapper.leavedetailsEntity(leavedetailsDTO);
             Integer id = leavedetailsRepo.getMaxleavedetailsID() + 1;
             leavedetailsEntity1.setId(id);
             leavedetailsRepo.save(leavedetailsEntity1);
-            DTO =  leavedetailsMapper.leavedetailsDTO(leavedetailsEntity1);
-            return DTO;
+            dto =  leavedetailsMapper.leavedetailsDTO(leavedetailsEntity1);
+            return dto;
         }
         else return null;
 
@@ -119,7 +118,6 @@ public class LeavedetailsCService implements LeavedetailsService{
 
 
     @Override
-    @Transactional
     public List<LeavedetailsDTO> getLeaveEmployeeWithinRange(Integer employeeId , Date FromDate , Date ToDate)
     {
         List<LeavedetailsEntity1> leavedetailsEntity1List =  leavedetailsRepo.SearchforleavesFromTo(FromDate , ToDate , employeeId);
@@ -136,7 +134,7 @@ public class LeavedetailsCService implements LeavedetailsService{
     @Override
     public List<LeavedetailsDTO> getLeavePagination(Integer pageNumber, Integer pageSize, Integer employeeId , Integer leavetypeId ) {
 
-        //Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
         List<LeavedetailsEntity1> filteredList = leavedetailsRepo.getLeavedetailsbyEmp(employeeId, leavetypeId);
         List<LeavedetailsDTO> DTOS = new ArrayList<>();
         for (LeavedetailsEntity1 entity : filteredList) {
@@ -160,33 +158,6 @@ public class LeavedetailsCService implements LeavedetailsService{
         return DTOS;
     }
 
-
-
-        //Pageable pageable = null;
-
-//        Page<LeavedetailsEntity1> pagelist =  pageRepo.findAll(pageable);
-//        List<LeavedetailsDTO> DTOS = new ArrayList<>();
-//
-//
-//        List<LeavedetailsEntity1> filteredList =  pagelist.stream().filter(x->
-//                (x.getLeavetype() == leavetypeId && x.getEmployee() == employeeId))
-//                .collect(Collectors.toList());
-        //Page<LeavedetailsEntity1> page = leavedetailsRepo.getLeavedetailsbyEmp(employeeId, leavetypeId, (java.awt.print.Pageable) pageable);
-        //List<LeavedetailsEntity1> pagelist =  pageRepo.findAll(pageable).getContent();
-
-        //List<LeavedetailsEntity1> pagelist = leavedetailsRepo.getLeavedetailsbyEmp(employeeId ,leavetypeId , pageable);
-//
-//        List<LeavedetailsEntity1> filteredList = pagelist.stream().filter(x ->
-//                Objects.equals(x.getLeavetype(), leavetypeId) &&   Objects.equals(x.getEmployee(), employeeId)).collect(Collectors.toList());
-
-
-
-//        for(LeavedetailsEntity1 entity: filteredList)
-//        {
-//            DTOS.add(leavedetailsMapper.leavedetailsDTO(entity));
-//        }
-//        //Page<LeavedetailsDTO> result = Page.empty(DTOS);
-//        return DTOS;
 
 
 

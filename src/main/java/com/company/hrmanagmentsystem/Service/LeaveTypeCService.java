@@ -51,30 +51,26 @@ public class LeaveTypeCService implements LeaveTypeService{
     }
 
     @Override
-    @Transactional
     public LeaveTypeDTO CreateLeaveType(LeaveTypeDTO leaveTypeDTO)
     {
-        // check that the created leaveType is not exist before
-        //leaveTypeRepo.CheckLeaveTypeNameExist(leaveTypeDTO.getName()) == null
-        if (
-         leaveTypeRepo.CheckTypeExist(leaveTypeDTO.getId()).isEmpty())
+
+        if (!leaveTypeRepo.existsById(leaveTypeDTO.getId()))
         {
             Integer id = leaveTypeRepo.leaveTypeMaxID() + 1;
             LeaveTypeEntity leaveTypeEntity =  leaveTypeMapper.leaveTypeEntity(leaveTypeDTO);
             leaveTypeEntity.setId(id);
             leaveTypeRepo.save(leaveTypeEntity);
-            LeaveTypeDTO DTO = leaveTypeMapper.leaveTypeDTO(leaveTypeEntity);
-            return DTO;
+            LeaveTypeDTO dto = leaveTypeMapper.leaveTypeDTO(leaveTypeEntity);
+            return dto;
         }
        return null;
     }
 
     @Override
-    @Transactional
     public boolean deleteLeaveType(Integer id)
     {
 
-        if(!leaveTypeRepo.CheckTypeExist(id).isEmpty())
+        if(leaveTypeRepo.existsById(id))
         {
             leaveTypeRepo.deleteById(id);
             return true;
@@ -86,19 +82,23 @@ public class LeaveTypeCService implements LeaveTypeService{
     public LeaveTypeDTO Update(Map<String , Object> leaveType)
     {
         Integer id = (Integer) leaveType.get("id");
-        LeaveTypeEntity leaveTypeEntity = leaveTypeRepo.findById(id).get();
-        Class leaveTypeEntityClass =LeaveTypeEntity.class;
-        leaveType.forEach( (k,v) ->
+        if(leaveTypeRepo.existsById(id))
         {
+            LeaveTypeEntity leaveTypeEntity = leaveTypeRepo.findById(id).get();
+            Class leaveTypeEntityClass =LeaveTypeEntity.class;
+            leaveType.forEach( (k,v) ->
+            {
 
-            Field field = ReflectionUtils.findField(leaveTypeEntityClass , k);
-            field.setAccessible(true);
-            ReflectionUtils.setField(field , leaveTypeEntity , v);
+                Field field = ReflectionUtils.findField(leaveTypeEntityClass , k);
+                field.setAccessible(true);
+                ReflectionUtils.setField(field , leaveTypeEntity , v);
 
-        });
-        leaveTypeRepo.saveAndFlush(leaveTypeEntity);
-        LeaveTypeDTO DTO = leaveTypeMapper.leaveTypeDTO(leaveTypeEntity);
-        return DTO;
+            });
+            leaveTypeRepo.saveAndFlush(leaveTypeEntity);
+            LeaveTypeDTO dto = leaveTypeMapper.leaveTypeDTO(leaveTypeEntity);
+            return dto;
+        }
+        else return null;
 
     }
 

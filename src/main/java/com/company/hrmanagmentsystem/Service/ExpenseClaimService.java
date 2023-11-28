@@ -5,6 +5,7 @@ import com.company.hrmanagmentsystem.model.ExpenseClaimDTO;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface ExpenseClaimService {
     public List<ExpenseClaimDTO> getAll();
@@ -16,5 +17,7 @@ public interface ExpenseClaimService {
     public ExpenseClaimDTO Submit(Map<String  , Object> Entry) ;// Entry : expenseClaimId and EmployeeId and description  and Status and date
     public List<ExpenseClaimDTO> getAllClaimPerEmployee (Integer empId);
     public EmployeeExpenseClaimsDTO getAllClaimsWithDetailsPerEmployee(Integer id);
+    public List<ExpenseClaimDTO> getAllClaimsPerEmployeePerType(Map<String , Object>  body);
+    public Optional<Double> getTotalPerEmployeePerType(Map<String , Object>  body);
 
 }
