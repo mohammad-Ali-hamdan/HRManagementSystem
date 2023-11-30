@@ -76,17 +76,22 @@ public class ExpenseTypeCService implements ExpenseTypeService{
     public ExpenseTypeDTO updateExpenseType(Map<String, Object> DtOToUpdate)
     {
         Integer id = (Integer) DtOToUpdate.get("id");
-        ExpenseTypeEntity entity = expTypeRepo.findById(id).get();
-        Class entityClass = ExpenseTypeEntity.class;
-        DtOToUpdate.forEach((k,v) ->
+        if(expTypeRepo.existsById(id))
         {
-            Field field = ReflectionUtils.findField(entityClass , k);
-            field.setAccessible(true);
-            ReflectionUtils.setField(field , entity , v);
-        });
-        expTypeRepo.saveAndFlush(entity);
-        ExpenseTypeDTO DTO = expTypeMap.expenseTypeDTO(entity);
-        return DTO;
+            ExpenseTypeEntity entity = expTypeRepo.findById(id).get();
+            Class entityClass = ExpenseTypeEntity.class;
+            DtOToUpdate.forEach((k,v) ->
+            {
+                Field field = ReflectionUtils.findField(entityClass , k);
+                field.setAccessible(true);
+                ReflectionUtils.setField(field , entity , v);
+            });
+            expTypeRepo.saveAndFlush(entity);
+            ExpenseTypeDTO DTO = expTypeMap.expenseTypeDTO(entity);
+            return DTO;
+        }
+        else return null;
+
     }
 
 }

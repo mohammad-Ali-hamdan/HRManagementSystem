@@ -43,7 +43,7 @@ public class ExpenseClaimEntryController {
         if(DTOCreated != null)
             return new ResponseEntity<>(DTOCreated , HttpStatus.OK);
         else
-            return new ResponseEntity<>("Failed to Create!" , HttpStatus.OK );
+            return new ResponseEntity<>("Failed to Create! , invalid id" , HttpStatus.OK );
 
     }
     @DeleteMapping("/delete/{id}")
@@ -53,7 +53,7 @@ public class ExpenseClaimEntryController {
         if(isDeleted)
             return new ResponseEntity<>("Deleted" , HttpStatus.OK);
         else
-            return new ResponseEntity<>("Failed to Delete!" , HttpStatus.OK );
+            return new ResponseEntity<>("Failed to Delete! , Invalid id" , HttpStatus.OK );
     }
 
     @PatchMapping("/update")
@@ -63,7 +63,7 @@ public class ExpenseClaimEntryController {
         if(UpdatedDTO != null)
             return new ResponseEntity<>(UpdatedDTO , HttpStatus.OK);
         else
-            return new ResponseEntity<>("Failed to Update!" , HttpStatus.OK );
+            return new ResponseEntity<>("Failed to Update! , Invalid id" , HttpStatus.OK );
     }
 
 

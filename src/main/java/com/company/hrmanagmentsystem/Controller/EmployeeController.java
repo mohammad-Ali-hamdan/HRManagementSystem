@@ -58,7 +58,7 @@ public class EmployeeController {
         if (employeeDTO != null)
             return new ResponseEntity<EmployeeDTO>(employeeDTO ,HttpStatus.OK );
         else
-            return new ResponseEntity<>(null ,HttpStatus.OK);
+            return new ResponseEntity<>("The department id must be valid and employee id must be unique " ,HttpStatus.OK);
 
     }
 
@@ -72,7 +72,7 @@ public class EmployeeController {
         if (ISdeleted)
             return new ResponseEntity<String>("deleted" ,HttpStatus.OK );
         else
-            return new ResponseEntity<String>("Failed to delete!" ,HttpStatus.OK);
+            return new ResponseEntity<String>("Failed to delete! , Invalid id" ,HttpStatus.OK);
 
     }
 
@@ -84,7 +84,7 @@ public class EmployeeController {
         if (employeeDTO != null)
             return new ResponseEntity<EmployeeDTO>(employeeDTO ,HttpStatus.OK );
         else
-            return new ResponseEntity<>(null ,HttpStatus.OK);
+            return new ResponseEntity<>("The department id must be valid and employee id must be valid" ,HttpStatus.OK);
 
     }
 

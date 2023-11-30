@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/apiDepartment")
@@ -45,7 +46,7 @@ public class DepartmentController {
         if(createdDepartmentDTO != null)
             return new ResponseEntity<DepartmentDTO>(createdDepartmentDTO , HttpStatus.OK);
         else
-            return new ResponseEntity<>("failed to create" , HttpStatus.OK);
+            return new ResponseEntity<>("failed to create , name of department  is already exist" , HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteDep/{id}") // Delete department
@@ -67,17 +68,21 @@ public class DepartmentController {
         return new ResponseEntity<List<DepartmentDTO>>( depService.getemployeesByAllDepartment(),  HttpStatus.OK) ;
     }
 
-    @GetMapping("/getAllEmployeeInDepartment/{id}")
-    public ResponseEntity<DepartmentEmployeeDTO> getAllEmployeeNamesInSpecificDepartment(@PathVariable Integer id)
-    {
 
-        return new ResponseEntity<DepartmentEmployeeDTO>(depService.getAllEmployeeNamesInSpecificDepartment(id) ,  HttpStatus.OK) ;
-    }
-
-    @GetMapping("/getAllEmployeesEntityInSpecificDepartment/{id}")
+    @GetMapping("/getAllEmployeesEntityInSpecificDepartment/{id}")  // list of employee in department
     public ResponseEntity<DepartmentDTO> getAllEmployeesEntityInSpecificDepartment(@PathVariable Integer id)
     {
         return new ResponseEntity<>(depService.getAllEmployeesEntityInSpecificDepartment(id) , HttpStatus.OK);
+    }
+
+    @PatchMapping("/updateDepartment") // update department
+    public ResponseEntity<?> updateDepartment(@RequestBody Map<String , Object> dto)
+    {
+        DepartmentDTO updatedDto = depService.update(dto);
+        if(updatedDto != null)
+            return new ResponseEntity<DepartmentDTO>(updatedDto , HttpStatus.OK);
+        else
+            return new ResponseEntity<>("Failed to update , Invalid id" , HttpStatus.OK);
     }
 
 

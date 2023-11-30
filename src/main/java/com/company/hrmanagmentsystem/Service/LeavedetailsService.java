@@ -15,8 +15,7 @@ public interface LeavedetailsService {
     public LeavedetailsDTO updateLeaveDetails(Map<String , Object> DTO);
     public LeavedetailsDTO SubmitLeave(LeavedetailsDTO leavedetailsDTO);
     public List<LeavedetailsDTO> getLeaveEmployeeWithinRange(Integer employeeId , Date FromDate , Date ToDate);
-    public List<LeavedetailsDTO> getLeavePagination(Integer pageNumber, Integer pageSize,Integer employeeId , Integer leavetypeId );
-    public List<LeavedetailsDTO> getLeavePagination2(Integer pageNumber, Integer pageSize,
-                                                     Integer employeeId , Integer leavetypeId );
+
+    public List<LeavedetailsDTO> getLeavePagination(Map<String , Object> pageable );
 
 }

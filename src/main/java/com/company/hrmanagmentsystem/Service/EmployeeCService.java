@@ -60,20 +60,21 @@ public class EmployeeCService implements EmployeeService {
     @Override
     public EmployeeDTO CreateEmployee(EmployeeDTO employeeDTOInput) // Create a new Employee
     {
-        employeeDTOInput.setId(empRepo.GetMaxEmpId() + 1);
-        boolean IsExistDepartment =  depRepo.existsById(employeeDTOInput.getDepartmentId());
-        if (IsExistDepartment)
+        if(!empRepo.existsById(employeeDTOInput.getId()))
         {
-            EmployeeEntity employeeEntity = empMap.empEntity(employeeDTOInput);
-            empRepo.save(employeeEntity);
-            EmployeeDTO employeeDTO = empMap.empDTO(employeeEntity);
-            return employeeDTO ;
+            boolean isExistDepartment =  depRepo.existsById(employeeDTOInput.getDepartmentId());
+            if (isExistDepartment)
+            {
+                employeeDTOInput.setId(empRepo.GetMaxEmpId() + 1);
+                EmployeeEntity employeeEntity = empMap.empEntity(employeeDTOInput);
+                empRepo.save(employeeEntity);
+                EmployeeDTO employeeDTO = empMap.empDTO(employeeEntity);
+                return employeeDTO ;
+            }
+            return null;
         }
         else
-
             return null;
-
-
 
     }
 
@@ -96,8 +97,8 @@ public class EmployeeCService implements EmployeeService {
     public EmployeeDTO updateEmp(Map<String , Object> dtoObject , Integer id ) // Update Employee using ReflectionUtils
     {
         Integer depId = (Integer) dtoObject.get("departmentId");
-        boolean IsExistDepartment =  depRepo.existsById(depId);
-        if(IsExistDepartment)
+        boolean isExistDepartment =  depRepo.existsById(depId);
+        if(isExistDepartment)
         {
             Optional<EmployeeEntity> employeeEntityOptional =  empRepo.findById(id);
             if(employeeEntityOptional.isPresent())

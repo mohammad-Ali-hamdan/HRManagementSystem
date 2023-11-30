@@ -45,7 +45,7 @@ public class ExpenseClaimController {
         if(DTOUpdated != null)
             return new ResponseEntity<>(DTOUpdated , HttpStatus.OK);
         else
-            return new ResponseEntity<>("Failed to Update" , HttpStatus.OK);
+            return new ResponseEntity<>("Failed to Update , Invalid id" , HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -55,7 +55,7 @@ public class ExpenseClaimController {
         if(isDeleted)
             return new ResponseEntity<>("Deleted" , HttpStatus.OK);
         else
-            return new ResponseEntity<>("Failed to delete" , HttpStatus.OK);
+            return new ResponseEntity<>("Failed to delete , Invalid id" , HttpStatus.OK);
     }
 
     @PostMapping("/createWithDateSQLFormat")
@@ -74,21 +74,21 @@ public class ExpenseClaimController {
         if(DTOCreated != null)
             return new ResponseEntity<>(DTOCreated , HttpStatus.OK);
         else
-            return new ResponseEntity<>("Failed to create" , HttpStatus.OK);
+            return new ResponseEntity<>("Failed to create , Invalid Id" , HttpStatus.OK);
     }
 
 
-    @PostMapping("/Submit") //// Entry : expenseClaimId and empId and description  and Status and date
+    @PostMapping("/Submit") //// Entry : expenseClaimId and empId and description  and status and date
     public ResponseEntity<?> Submit(@RequestBody Map<String , Object> entry)
     {
         ExpenseClaimDTO DTO =  service.Submit(entry);
         if(DTO != null)
             return new ResponseEntity<>(DTO , HttpStatus.OK);
         else
-            return new ResponseEntity<>("Submit Failed , Expense claim Id is invalid " , HttpStatus.OK);
+            return new ResponseEntity<>("Submit Failed , Expense claim Id and Employee Id must be valid " , HttpStatus.OK);
     }
 
-    @GetMapping("/getClaimPerEmployee/{id}")
+    @GetMapping("/getClaimPerEmployee/{id}") // All Claims per employee
     public ResponseEntity<?> getClaimPerEmployee(@PathVariable Integer id)
     {
         List<ExpenseClaimDTO> DTOS = service.getAllClaimPerEmployee(id);
@@ -98,7 +98,7 @@ public class ExpenseClaimController {
         return new ResponseEntity<>("No claims for this employee" , HttpStatus.OK);
     }
 
-    @GetMapping("/getAllClaimsPerEmployee/{id}") // All Claims per employee
+    @GetMapping("/getAllClaimsPerEmployee/{id}") // All Claims with entries per employee
     public ResponseEntity<?> getAllClaimsWithDetailsPerEmployee(@PathVariable Integer id)
     {
         EmployeeExpenseClaimsDTO DTO = service.getAllClaimsWithDetailsPerEmployee(id);
@@ -109,22 +109,14 @@ public class ExpenseClaimController {
     }
 
 
-    @GetMapping("/getAllClaimsPerEmployeePerType") // each claim can has many expense types // All claims per employee and per type
-    public ResponseEntity<?> getAllClaimsPerEmployeePerType(@RequestBody Map<String , Object> body) // body : empId , claimType
-    {
-        List<ExpenseClaimDTO> DTOS =  service.getAllClaimsPerEmployeePerType(body);
-        if(DTOS !=null)
-            return new ResponseEntity<>(DTOS , HttpStatus.OK);
-        else
-            return new ResponseEntity<>("No claims of this claim type for this employee" , HttpStatus.OK);
-    }
+
 
     @GetMapping("/getTotalPerEmployeePerType") // Total per Employee and per claim type
     public ResponseEntity<?> getTotalPerEmployeePerType(@RequestBody Map<String , Object> body) // body : empId , claimType
     {
-        Optional<Double> total = service.getTotalPerEmployeePerType(body);
-        if(total !=null)
-            return new ResponseEntity<>(total , HttpStatus.OK);
+        Map<String,Object> result = service.getTotalPerEmployeePerType(body);
+        if(result.get("total") !=null)
+            return new ResponseEntity<>(result , HttpStatus.OK);
         else
             return new ResponseEntity<>("No claims of this claim type for this employee" , HttpStatus.OK);
     }

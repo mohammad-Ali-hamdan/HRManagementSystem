@@ -37,7 +37,7 @@ public class LeaveTypeController {
         if(leaveTypeDTO != null)
             return new ResponseEntity<LeaveTypeDTO>(leaveTypeDTO , HttpStatus.OK);
         else
-            return new ResponseEntity<>(null , HttpStatus.OK);
+            return new ResponseEntity<>("Invalid id" , HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteleavetype/{id}") // Delete department
@@ -58,7 +58,7 @@ public class LeaveTypeController {
         if(leaveTypeDTO1 != null)
             return new ResponseEntity<LeaveTypeDTO>(leaveTypeDTO1 , HttpStatus.OK);
         else
-            return new ResponseEntity<>("Invalid id" , HttpStatus.OK);
+            return new ResponseEntity<>("deplicated id" , HttpStatus.OK);
 
     }
 

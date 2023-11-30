@@ -64,6 +64,6 @@ public class ExpenseTypeController {
         if(DTO1 !=null)
             return new ResponseEntity<>(DTO1 , HttpStatus.OK);
         else
-            return new ResponseEntity<>("Failed to update " , HttpStatus.OK);
+            return new ResponseEntity<>("Failed to update ,Invalid id " , HttpStatus.OK);
     }
 }

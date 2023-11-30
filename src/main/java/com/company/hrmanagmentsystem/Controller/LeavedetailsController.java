@@ -28,13 +28,13 @@ public class LeavedetailsController {
             return new ResponseEntity<>(null , HttpStatus.OK);
     }
     @GetMapping("/getbyId/{id}")
-    public ResponseEntity<LeavedetailsDTO> getbyId(@PathVariable Integer id)
+    public ResponseEntity<?> getbyId(@PathVariable Integer id)
     {
      LeavedetailsDTO dto =  service.getbyId(id);
      if(dto != null)
          return new ResponseEntity<>(dto , HttpStatus.OK);
      else
-         return new ResponseEntity<>(null , HttpStatus.OK);
+         return new ResponseEntity<>("Invalid id" , HttpStatus.OK);
     }
 
     @DeleteMapping("/deletebyId/{id}")
@@ -53,7 +53,7 @@ public class LeavedetailsController {
         if(dto !=null)
             return new ResponseEntity<>(dto , HttpStatus.OK);
         else
-            return new ResponseEntity<>("Failed To Update" , HttpStatus.OK);
+            return new ResponseEntity<>("Failed To Update , leave id , employee id and leave Type should be exist" , HttpStatus.OK);
     }
 
     @PostMapping("/SubmitLeave")
@@ -63,11 +63,11 @@ public class LeavedetailsController {
         if(dto != null)
             return new ResponseEntity<>(dto , HttpStatus.OK);
         else
-            return new ResponseEntity<>("Duplicate id" , HttpStatus.OK);
+            return new ResponseEntity<>("Failed to submit , leave id must be unique , employee id and leave Type should be exist" , HttpStatus.OK);
     }
 
-    @PostMapping("/getleaveEmployeeRange")
-    public ResponseEntity<List<LeavedetailsDTO>> getLeaveEmployeeWithinRange(@RequestBody LeaveEmployeeDTO dto) // employeeId,FromDate,ToDate
+    @GetMapping("/getleaveEmployeeRange")
+    public ResponseEntity<?> getLeaveEmployeeWithinRange(@RequestBody LeaveEmployeeDTO dto) // employeeId,FromDate,ToDate
     {
 
          Integer employeeId =  dto.getEmployeeId();
@@ -77,30 +77,15 @@ public class LeavedetailsController {
          if(!dtos.isEmpty())
              return new ResponseEntity<>(dtos , HttpStatus.OK);
          else
-             return new ResponseEntity<>(null , HttpStatus.OK);
+             return new ResponseEntity<>("There is no leaves in the provided range for this employee" , HttpStatus.OK);
     }
-
 
 
     @GetMapping("/listpagination")
     public ResponseEntity<List<LeavedetailsDTO>> Pagination(@RequestBody Map<String , Object> pageable    )
     {
-        Integer  pageSize = (Integer) pageable.get("pageSize");
-        Integer  pageNumber = (Integer) pageable.get("pageNumber");
-        Integer  employee = (Integer) pageable.get("employee");
-        Integer  leave = (Integer) pageable.get("leave");
-        List<LeavedetailsDTO> dtos = service.getLeavePagination(pageNumber , pageSize , employee ,leave);
-        return new ResponseEntity<>(dtos , HttpStatus.OK);
-    }
 
-    @GetMapping("/listpagination2")
-    public ResponseEntity<List<LeavedetailsDTO>> Pagination2(@RequestBody Map<String , Object> pageable    )
-    {
-        Integer  pageSize = (Integer) pageable.get("pageSize");
-        Integer  pageNumber = (Integer) pageable.get("pageNumber");
-        Integer  employee = (Integer) pageable.get("employee");
-        Integer  leave = (Integer) pageable.get("leave");
-        List<LeavedetailsDTO> dtos = service.getLeavePagination2(pageNumber , pageSize , employee ,leave);
+        List<LeavedetailsDTO> dtos = service.getLeavePagination(pageable);
         return new ResponseEntity<>(dtos , HttpStatus.OK);
     }
 

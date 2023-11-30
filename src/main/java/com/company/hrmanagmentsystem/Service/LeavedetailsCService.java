@@ -3,6 +3,8 @@ package com.company.hrmanagmentsystem.Service;
 import com.company.hrmanagmentsystem.Entity.LeaveTypeEntity;
 import com.company.hrmanagmentsystem.Entity.LeavedetailsEntity1;
 import com.company.hrmanagmentsystem.Mapper.LeavedetailsMapper;
+import com.company.hrmanagmentsystem.Repository.EmployeeRepo;
+import com.company.hrmanagmentsystem.Repository.LeaveTypeRepo;
 import com.company.hrmanagmentsystem.Repository.LeavedetailsRepo;
 import com.company.hrmanagmentsystem.Repository.PaginationRepository;
 import com.company.hrmanagmentsystem.model.LeaveTypeDTO;
@@ -25,7 +27,8 @@ public class LeavedetailsCService implements LeavedetailsService{
 
     @Autowired private LeavedetailsRepo leavedetailsRepo ;
     @Autowired private LeavedetailsMapper leavedetailsMapper;
-    @Autowired private PaginationRepository pageRepo;
+    @Autowired private EmployeeRepo employeeRepo;
+    @Autowired private LeaveTypeRepo leaveTypeRepo;
 
     @Override
     public List<LeavedetailsDTO> getall()
@@ -72,7 +75,9 @@ public class LeavedetailsCService implements LeavedetailsService{
     {
 
 
-        if (!leavedetailsRepo.existsById(leavedetailsDTO.getId()))
+        if ((!leavedetailsRepo.existsById(leavedetailsDTO.getId())) &&
+                employeeRepo.existsById(leavedetailsDTO.getEmployee()) &&
+                leaveTypeRepo.existsById(leavedetailsDTO.getLeavetype()))
         {
             LeavedetailsDTO dto = new LeavedetailsDTO();
             LeavedetailsEntity1 leavedetailsEntity1 =  leavedetailsMapper.leavedetailsEntity(leavedetailsDTO);
@@ -91,28 +96,35 @@ public class LeavedetailsCService implements LeavedetailsService{
     public LeavedetailsDTO updateLeaveDetails(Map<String , Object> DTO)
     {
         Integer id = (Integer) DTO.get("id");
-        LeavedetailsEntity1 entity = leavedetailsRepo.findById(id).get();
-        Class entityClass = LeavedetailsEntity1.class;
-        DTO.forEach((k,v) ->
+        Integer empId = (Integer) DTO.get("employee");
+        Integer leavetypeId = (Integer) DTO.get("leavetype");
+        if (leavedetailsRepo.existsById(id) &&
+                employeeRepo.existsById(empId) &&
+                leaveTypeRepo.existsById(leavetypeId))
         {
-            Field field = ReflectionUtils.findField(entityClass , k);
-            field.setAccessible(true);
-            //ReflectionUtils.setField(field , entity , v);
-            // I get error as field  Date.Sql so convert it to Date.Sql
-            if (field.getType() == java.sql.Date.class)
+            LeavedetailsEntity1 entity = leavedetailsRepo.findById(id).get();
+            Class entityClass = LeavedetailsEntity1.class;
+            DTO.forEach((k,v) ->
             {
-                java.sql.Date dateValue = java.sql.Date.valueOf((String) v);
-                ReflectionUtils.setField(field, entity, dateValue);
-            }
-            else
-            {
-                ReflectionUtils.setField(field, entity, v);
-            }
+                Field field = ReflectionUtils.findField(entityClass , k);
+                field.setAccessible(true);
+                if (field.getType() == java.sql.Date.class)
+                {
+                    java.sql.Date dateValue = java.sql.Date.valueOf((String) v);
+                    ReflectionUtils.setField(field, entity, dateValue);
+                }
+                else
+                {
+                    ReflectionUtils.setField(field, entity, v);
+                }
 
-        });
-        leavedetailsRepo.saveAndFlush(entity);
-        LeavedetailsDTO DTOupdated = leavedetailsMapper.leavedetailsDTO(entity);
-        return DTOupdated;
+            });
+            leavedetailsRepo.saveAndFlush(entity);
+            LeavedetailsDTO DTOupdated = leavedetailsMapper.leavedetailsDTO(entity);
+            return DTOupdated;
+        }
+        else return null;
+
 
     }
 
@@ -131,25 +143,17 @@ public class LeavedetailsCService implements LeavedetailsService{
 
 
     }
-    @Override
-    public List<LeavedetailsDTO> getLeavePagination(Integer pageNumber, Integer pageSize, Integer employeeId , Integer leavetypeId ) {
 
-
-        List<LeavedetailsEntity1> filteredList = leavedetailsRepo.getLeavedetailsbyEmp(employeeId, leavetypeId);
-        List<LeavedetailsDTO> DTOS = new ArrayList<>();
-        for (LeavedetailsEntity1 entity : filteredList) {
-            DTOS.add(leavedetailsMapper.leavedetailsDTO(entity));
-        }
-        int start = pageNumber * pageSize;
-        int end = Math.min(start + pageSize, DTOS.size());
-        return DTOS.subList(start, end);
-    }
 
     @Override
-    public List<LeavedetailsDTO> getLeavePagination2(Integer pageNumber, Integer pageSize,Integer employeeId , Integer leavetypeId )
+    public List<LeavedetailsDTO> getLeavePagination(Map<String , Object> pageable )
     {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<LeavedetailsEntity1> filteredList = leavedetailsRepo.findByEmpIdLeaveId(employeeId , leavetypeId , pageable );
+        Integer  pageSize = (Integer) pageable.get("pageSize");
+        Integer  pageNumber = (Integer) pageable.get("pageNumber");
+        Integer  employee = (Integer) pageable.get("employee");
+        Integer  leave = (Integer) pageable.get("leave");
+        Pageable page = PageRequest.of(pageNumber, pageSize);
+        Page<LeavedetailsEntity1> filteredList = leavedetailsRepo.findByEmpIdLeaveId(employee , leave , page );
         List<LeavedetailsDTO> DTOS = new ArrayList<>();
         for(LeavedetailsEntity1 entity: filteredList)
         {

@@ -45,38 +45,6 @@ public class ExpenseClaimEntryCService implements ExpenseClaimEntryService{
         return null;
     }
 
-//    @Override
-//    public ExpenseClaimEntryDTO Create(ExpenseClaimEntryDTO DTO)
-//    {
-//        if(!repo.existsById(DTO.getId()))
-//        {
-//            DTO.setId(repo.MaxId() + 1);
-//
-//            // Error
-//            Field[] fields = DTO.getClass().getDeclaredFields();
-//            for (Field field : fields) {
-//                if (field.getType() == java.sql.Date.class) {
-//                    SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
-//                    java.sql.Date dateValue = null;
-//                    try {
-//                        // Parse the incoming date string
-//                        Date utilDate = inputFormat.parse(DTO.getDate().toString());
-//
-//                        // Convert java.util.Date to java.sql.Date
-//                        dateValue = new java.sql.Date(utilDate.getTime());
-//                    } catch (ParseException e) {
-//                        e.printStackTrace(); // Handle the parsing exception appropriately
-//                    }
-//                    DTO.setDate(dateValue);
-//                }
-//            }
-//
-//            ExpenseClaimEntryEntity entity =  mapper.expClaimEntryEntity(DTO);
-//            return mapper.expClaimEntryDTO(repo.save(entity)) ;
-//        }
-//        else
-//            return null;
-//    }
 
     @Override
     public ExpenseClaimEntryDTO Create(Map<String , Object> DTO)
@@ -136,37 +104,39 @@ public class ExpenseClaimEntryCService implements ExpenseClaimEntryService{
     public ExpenseClaimEntryDTO update(Map<String , Object> DTO)
     {
         Integer id = (Integer) DTO.get("id");
-        ExpenseClaimEntryEntity entity = repo.findById(id).get();
-        Class entityClass = ExpenseClaimEntryEntity.class;
-        DTO.forEach((k,v) ->
+        if(repo.existsById(id))
         {
-            Field field = ReflectionUtils.findField(entityClass , k);
-            field.setAccessible(true);
-            //ReflectionUtils.setField(field , entity , v);
-            // I get error as field  Date.Sql so convert it to Date.Sql
-            //method found on net
-            if (field.getType() == java.sql.Date.class)
+            ExpenseClaimEntryEntity entity = repo.findById(id).get();
+            Class entityClass = ExpenseClaimEntryEntity.class;
+            DTO.forEach((k,v) ->
             {
-                String dateString = (String) v;
-                SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
-                SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Date utilDate = null;
-                try {
-                    utilDate = inputFormat.parse(dateString);
-                } catch (ParseException e) {
-                    //e.printStackTrace();
+                Field field = ReflectionUtils.findField(entityClass , k);
+                field.setAccessible(true);
+                if (field.getType() == java.sql.Date.class)
+                {
+                    String dateString = (String) v;
+                    SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
+                    SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date utilDate = null;
+                    try {
+                        utilDate = inputFormat.parse(dateString);
+                    } catch (ParseException e) {
+                        //e.printStackTrace();
+                    }
+                    String formattedDate = outputFormat.format(utilDate);
+                    java.sql.Date dateValue = java.sql.Date.valueOf(formattedDate);
+                    ReflectionUtils.setField(field, entity, dateValue);
                 }
-                String formattedDate = outputFormat.format(utilDate);
-                java.sql.Date dateValue = java.sql.Date.valueOf(formattedDate);
-                ReflectionUtils.setField(field, entity, dateValue);
-            }
-            else
-            {
-                ReflectionUtils.setField(field, entity, v);
-            }
-        });
-        repo.saveAndFlush(entity);
-        return  mapper.expClaimEntryDTO(entity);
+                else
+                {
+                    ReflectionUtils.setField(field, entity, v);
+                }
+            });
+            repo.saveAndFlush(entity);
+            return  mapper.expClaimEntryDTO(entity);
+        }
+        else return null;
+
     }
 
     @Override

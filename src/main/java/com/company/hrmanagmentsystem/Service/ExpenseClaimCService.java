@@ -75,41 +75,49 @@ public class ExpenseClaimCService implements ExpenseClaimService{
     public ExpenseClaimDTO update (Map<String , Object> DTO)
     {
         Integer id = (Integer) DTO.get("id");
-        ExpenseClaimEntity entity = repo.findById(id).get();
-        Class ClassEntity = ExpenseClaimEntity.class;
-        DTO.forEach((k,v) ->
+        if(repo.existsById(id))
         {
-            Field field = ReflectionUtils.findField(ClassEntity , k);
-            field.setAccessible(true);
-            if(field.getType() == java.sql.Date.class)
+            ExpenseClaimEntity entity = repo.findById(id).get();
+            Class ClassEntity = ExpenseClaimEntity.class;
+            DTO.forEach((k,v) ->
             {
-                String dateString = (String) v;
-                SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
-                SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Date utilDate = null;
-                try {
-                    utilDate = inputFormat.parse(dateString);
-                } catch (ParseException e) {
-                    //e.printStackTrace();
+                if(v != null)
+                {
+                    Field field = ReflectionUtils.findField(ClassEntity , k);
+                    field.setAccessible(true);
+
+                    if(field.getType() == java.sql.Date.class)
+                    {
+                        String dateString = (String) v;
+                        SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        Date utilDate = null;
+                        try {
+                            utilDate = inputFormat.parse(dateString);
+                        } catch (ParseException e) {
+                            //e.printStackTrace();
+                        }
+                        String formattedDate = outputFormat.format(utilDate);
+                        java.sql.Date dateValue = java.sql.Date.valueOf(formattedDate);
+                        ReflectionUtils.setField(field, entity, dateValue);
+                    }
+                    else
+                    {
+                        ReflectionUtils.setField(field , entity , v);
+                    }
                 }
-                String formattedDate = outputFormat.format(utilDate);
-                java.sql.Date dateValue = java.sql.Date.valueOf(formattedDate);
-                ReflectionUtils.setField(field, entity, dateValue);
-            }
-            else
-            {
-                ReflectionUtils.setField(field , entity , v);
-            }
 
+            });
+            repo.saveAndFlush(entity);
+            return mapper.DTO(entity);
+        }
+        else return null;
 
-        });
-        repo.saveAndFlush(entity);
-        return mapper.DTO(entity);
     }
 
 
     @Override
-    public ExpenseClaimDTO createWithDateSQLFormat(ExpenseClaimDTO DTO) //
+    public ExpenseClaimDTO createWithDateSQLFormat(ExpenseClaimDTO DTO)
     {
         if(!repo.existsById(DTO.getId()))
         {
@@ -134,28 +142,30 @@ public class ExpenseClaimCService implements ExpenseClaimService{
             Class entityClass = ExpenseClaimEntity.class;
             DTO.forEach((k,v) ->
             {
-                Field field = ReflectionUtils.findField(entityClass , k);
-                field.setAccessible(true);
-                if(field.getType() == java.sql.Date.class)
+                if(v !=null)
                 {
-                    String dateString = (String) v;
-                    SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
-                    SimpleDateFormat outputFormat= new SimpleDateFormat("yyyy-MM-dd");
-                    Date utilDate = null;
-                    try {
-                        utilDate = inputFormat.parse(dateString);
-                    }
-                    catch (ParseException e)
-                    {}
-                    //String s = inputFormat.format(dateString)
-                    String formattedDate = outputFormat.format(utilDate);
-                    java.sql.Date date = java.sql.Date.valueOf(formattedDate);
-                    ReflectionUtils.setField(field , entity , date);
+                    Field field = ReflectionUtils.findField(entityClass , k);
+                    field.setAccessible(true);
+                    if(field.getType() == java.sql.Date.class)
+                    {
+                        String dateString = (String) v;
+                        SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        SimpleDateFormat outputFormat= new SimpleDateFormat("yyyy-MM-dd");
+                        Date utilDate = null;
+                        try {
+                            utilDate = inputFormat.parse(dateString);
+                        }
+                        catch (ParseException e)
+                        {}
+                        String formattedDate = outputFormat.format(utilDate);
+                        java.sql.Date date = java.sql.Date.valueOf(formattedDate);
+                        ReflectionUtils.setField(field , entity , date);
 
-                }
-                else
-                {
-                    ReflectionUtils.setField(field , entity , v);
+                    }
+                    else
+                    {
+                        ReflectionUtils.setField(field , entity , v);
+                    }
                 }
 
             });
@@ -174,7 +184,6 @@ public class ExpenseClaimCService implements ExpenseClaimService{
         Integer expenseClaimId = (Integer) Entry.get("expenseClaimId");
         String description = (String) Entry.get("description");
         String status = (String) Entry.get("status");
-        //java.sql.Date date = java.sql.Date.valueOf(((String) Entry.get("date")));
         String dateString = (String) Entry.get("date");
         SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat outputFormat= new SimpleDateFormat("yyyy-MM-dd");
@@ -187,7 +196,7 @@ public class ExpenseClaimCService implements ExpenseClaimService{
         String formattedDate = outputFormat.format(utilDate);
         java.sql.Date date = java.sql.Date.valueOf(formattedDate);
         List<Integer> entryIds = expenseClaimEntryRepo.CheckExist(expenseClaimId);
-        if(!entryIds.isEmpty()) //exist
+        if(!entryIds.isEmpty() && employeeRepo.existsById(empId)) //exist
         {
             Double total =  expenseClaimEntryRepo.CalculateTotalClaim(expenseClaimId);
             ExpenseClaimEntity entitySubmit = new ExpenseClaimEntity();
@@ -253,27 +262,20 @@ public class ExpenseClaimCService implements ExpenseClaimService{
         else    return null;
 
     }
-    @Override
-    public List<ExpenseClaimDTO> getAllClaimsPerEmployeePerType(Map<String , Object>  body)
-    {
-        Integer empId = (Integer) body.get("empId");
-        Integer claimType = (Integer) body.get("claimType");
-        List<ExpenseClaimEntity> expenseClaimEntityList  = repo.getAllClaimsPerEmployeePerType(empId , claimType);
-        List<ExpenseClaimDTO> DTOS = new ArrayList<>();
-        for(ExpenseClaimEntity entity : expenseClaimEntityList)
-        {
-            DTOS.add(mapper.DTO(entity));
-        }
-        return DTOS;
-    }
+
 
     @Override
-    public Optional<Double>  getTotalPerEmployeePerType(Map<String , Object>  body)
+    public Map<String,Object>  getTotalPerEmployeePerType(Map<String , Object>  body)
     {
         Integer empId = (Integer) body.get("empId");
         Integer claimType = (Integer) body.get("claimType");
         Optional<Double>  total  = repo.getTotalPerEmployeePerType(empId , claimType);
-        return total;
+        Map<String , Object> returnBody = new HashMap<>();
+        returnBody.put("emloyeeId" , empId);
+        returnBody.put("claimType" , claimType);
+        returnBody.put("total" , total);
+
+        return returnBody;
     }
 
 
