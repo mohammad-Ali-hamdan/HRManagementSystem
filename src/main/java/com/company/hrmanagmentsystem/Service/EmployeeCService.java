@@ -79,16 +79,23 @@ public class EmployeeCService implements EmployeeService {
     }
 
     @Override
-    public boolean deleteEmp(Integer id) // Delete existence employee
+    public String deleteEmp(Integer id) // Delete existence employee
     {
-        boolean isDeleted = false;
-        Optional<EmployeeEntity> employeeEntityOptional = empRepo.findById(id);
-        if(employeeEntityOptional.isPresent())
-        {
-            empRepo.deleteById(id);
-            isDeleted = true;
+        String isDeleted = "false";
+        try {
+            Optional<EmployeeEntity> employeeEntityOptional = empRepo.findById(id);
+            if(employeeEntityOptional.isPresent())
+            {
+                empRepo.deleteById(id);
+                isDeleted = "true";
 
+            }
         }
+        catch (Exception ex)
+        {
+            isDeleted = "sql";
+        }
+
         return isDeleted;
 
     }

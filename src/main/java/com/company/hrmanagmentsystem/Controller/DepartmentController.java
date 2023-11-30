@@ -50,13 +50,15 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/deleteDep/{id}") // Delete department
-    public ResponseEntity<String> deleteDepartment(@PathVariable Integer id)
+    public ResponseEntity<?> deleteDepartment(@PathVariable Integer id)
     {
-        boolean isDeleted =  depService.deleteDep(id);
-        if(isDeleted)
+        String isDeleted =  depService.deleteDep(id);
+        if(isDeleted.equals("true"))
             return new ResponseEntity<String>("Deleted" , HttpStatus.OK);
+        else if (isDeleted.equals("false"))
+            return new ResponseEntity<String>("Invalid Id" , HttpStatus.NOT_FOUND);
         else
-            return new ResponseEntity<String>("Invalid Id" , HttpStatus.OK);
+            return new ResponseEntity<String>("Can't delete the record , foreign key restriction", HttpStatus.NOT_FOUND);
 
     }
 

@@ -60,14 +60,22 @@ public class ExpenseClaimCService implements ExpenseClaimService{
     }
 
     @Override
-    public boolean delete(Integer id)
+    public String delete(Integer id)
     {
-        boolean isDeleted = false ;
-        if(repo.existsById(id))
+        String isDeleted = "false" ;
+        try
         {
-            repo.deleteById(id);
-            isDeleted = true;
+            if(repo.existsById(id))
+            {
+                repo.deleteById(id);
+                isDeleted = "true";
+            }
         }
+        catch (Exception ex)
+        {
+            isDeleted = "sql";
+        }
+
         return isDeleted;
     }
 

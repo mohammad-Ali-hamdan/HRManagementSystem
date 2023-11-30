@@ -10,7 +10,7 @@ public interface DepartmentService {
     public List<DepartmentDTO> getallDepartments();
     public DepartmentDTO getDepartmentById(Integer id);
     public DepartmentDTO createDepartment(DepartmentDTO departmentDTO);
-    public boolean deleteDep(Integer id);
+    public String deleteDep(Integer id); // Delete existence department
     public List<DepartmentDTO> getemployeesByAllDepartment();
     public DepartmentEmployeeDTO getAllEmployeeNamesInSpecificDepartment(Integer id);
     public DepartmentDTO getAllEmployeesEntityInSpecificDepartment(Integer id);

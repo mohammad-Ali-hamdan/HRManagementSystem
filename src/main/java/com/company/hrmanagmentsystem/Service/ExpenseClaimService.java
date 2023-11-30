@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface ExpenseClaimService {
     public List<ExpenseClaimDTO> getAll();
     public ExpenseClaimDTO getById(Integer id);
-    public boolean delete(Integer id);
+    public String delete(Integer id);
     public ExpenseClaimDTO update (Map<String , Object> DTO);
     public ExpenseClaimDTO createWithDateSQLFormat(ExpenseClaimDTO DTO);
     public ExpenseClaimDTO create(Map<String , Object> DTO);

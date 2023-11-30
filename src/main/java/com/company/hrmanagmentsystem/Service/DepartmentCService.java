@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -88,16 +89,25 @@ public class DepartmentCService implements DepartmentService{
     }
 
     @Override
-    public boolean deleteDep(Integer id) // Delete existence department
+    public String deleteDep(Integer id) // Delete existence department
     {
-        boolean isDeleted = false;
-        Optional<DepartmentEntity> departmentEntityOptional = depRepo.findById(id);
-        if(departmentEntityOptional.isPresent())
-        {
-            depRepo.deleteById(id);
-            isDeleted = true;
 
+        String isDeleted = "false";
+        try
+        {
+            Optional<DepartmentEntity> departmentEntityOptional = depRepo.findById(id);
+            if(departmentEntityOptional.isPresent())
+            {
+                depRepo.deleteById(id);
+                isDeleted = "true";
+
+            }
         }
+        catch (Exception ex)
+        {
+            isDeleted = "SqlError";
+        }
+
         return isDeleted;
 
     }

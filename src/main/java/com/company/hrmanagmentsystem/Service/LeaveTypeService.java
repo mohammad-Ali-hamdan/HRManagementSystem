@@ -9,6 +9,6 @@ public interface LeaveTypeService {
     public LeaveTypeDTO getbyID(Integer id);
     public List<LeaveTypeDTO> getall();
     public LeaveTypeDTO CreateLeaveType(LeaveTypeDTO leaveTypeDTO);
-    public boolean deleteLeaveType(Integer id);
+    public String deleteLeaveType(Integer id);
     public LeaveTypeDTO Update(Map<String , Object> leaveType);
 }

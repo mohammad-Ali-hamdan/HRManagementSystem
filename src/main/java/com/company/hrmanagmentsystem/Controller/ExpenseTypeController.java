@@ -40,11 +40,13 @@ public class ExpenseTypeController {
     @DeleteMapping("/deleteById/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Integer id)
     {
-        boolean isDeleted =  service.deleteById(id);
-        if(isDeleted)
+        String isDeleted =  service.deleteById(id);
+        if(isDeleted.equals("true"))
             return new ResponseEntity<>("Deleted" , HttpStatus.OK);
+        else if(isDeleted.equals("false"))
+            return new ResponseEntity<>("Failed to Delete . There is no expense Type fo the provided id" , HttpStatus.NOT_FOUND);
         else
-            return new ResponseEntity<>("Failed to Delete . There is no expense Type fo the provided id" , HttpStatus.OK);
+            return new ResponseEntity<String>("Can't delete the record , foreign key restriction", HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/create")

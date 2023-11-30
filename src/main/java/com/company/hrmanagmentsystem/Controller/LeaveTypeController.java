@@ -43,11 +43,13 @@ public class LeaveTypeController {
     @DeleteMapping("/deleteleavetype/{id}") // Delete department
     public ResponseEntity<String> deleteleaveType(@PathVariable Integer id)
     {
-        boolean isDeleted =  leaveTypeService.deleteLeaveType(id);
-        if(isDeleted)
+        String isDeleted =  leaveTypeService.deleteLeaveType(id);
+        if(isDeleted.equals("true"))
             return new ResponseEntity<String>("Deleted" , HttpStatus.OK);
+        else if(isDeleted.equals("false"))
+            return new ResponseEntity<String>("Not exist , Failed to Delete" , HttpStatus.NOT_FOUND);
         else
-            return new ResponseEntity<String>("Not exist , Failed to Delete" , HttpStatus.OK);
+            return new ResponseEntity<String>("Can't delete the record , foreign key restriction", HttpStatus.NOT_FOUND);
 
     }
 

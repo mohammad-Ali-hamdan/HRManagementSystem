@@ -51,11 +51,13 @@ public class ExpenseClaimController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Integer id)
     {
-        boolean isDeleted = service.delete(id);
-        if(isDeleted)
+        String isDeleted = service.delete(id);
+        if(isDeleted.equals("true"))
             return new ResponseEntity<>("Deleted" , HttpStatus.OK);
+        else if(isDeleted.equals("false"))
+            return new ResponseEntity<>("Failed to delete , Invalid id" , HttpStatus.NOT_FOUND);
         else
-            return new ResponseEntity<>("Failed to delete , Invalid id" , HttpStatus.OK);
+            return new ResponseEntity<String>("Can't delete the record , foreign key restriction", HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/createWithDateSQLFormat")

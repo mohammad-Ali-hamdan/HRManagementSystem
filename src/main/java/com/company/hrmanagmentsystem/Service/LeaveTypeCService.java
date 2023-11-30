@@ -67,15 +67,23 @@ public class LeaveTypeCService implements LeaveTypeService{
     }
 
     @Override
-    public boolean deleteLeaveType(Integer id)
+    public String deleteLeaveType(Integer id)
     {
-
-        if(leaveTypeRepo.existsById(id))
+        String isDeleted = "false";
+        try
         {
-            leaveTypeRepo.deleteById(id);
-            return true;
+            if(leaveTypeRepo.existsById(id))
+            {
+                leaveTypeRepo.deleteById(id);
+                isDeleted = "true";
+            }
         }
-        return false;
+        catch (Exception ex)
+        {
+            isDeleted = "sqlError";
+        }
+
+        return isDeleted;
     }
 
     @Override

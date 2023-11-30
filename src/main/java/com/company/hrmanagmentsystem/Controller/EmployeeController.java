@@ -68,11 +68,13 @@ public class EmployeeController {
     @DeleteMapping("/deleteEmp/{id}")
     public ResponseEntity<String> deleteEmp(@PathVariable Integer id)
     {
-        boolean ISdeleted = service.deleteEmp(id);
-        if (ISdeleted)
-            return new ResponseEntity<String>("deleted" ,HttpStatus.OK );
+        String isDeleted = service.deleteEmp(id);
+        if(isDeleted.equals("true"))
+            return new ResponseEntity<>("Deleted" , HttpStatus.OK);
+        else if(isDeleted.equals("false"))
+            return new ResponseEntity<>("Failed to delete , Invalid id" , HttpStatus.NOT_FOUND);
         else
-            return new ResponseEntity<String>("Failed to delete! , Invalid id" ,HttpStatus.OK);
+            return new ResponseEntity<String>("Can't delete the record , foreign key restriction", HttpStatus.NOT_FOUND);
 
     }
 

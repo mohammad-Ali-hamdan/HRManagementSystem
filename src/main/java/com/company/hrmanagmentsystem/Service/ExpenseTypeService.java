@@ -8,7 +8,7 @@ import java.util.Map;
 public interface ExpenseTypeService {
     public List<ExpenseTypeDTO> getAll();
     public ExpenseTypeDTO getById(Integer id);
-    public boolean deleteById(Integer id);
+    public String deleteById(Integer id);
     public ExpenseTypeDTO createExpanseType(ExpenseTypeDTO DTO);
     public ExpenseTypeDTO updateExpenseType(Map<String, Object> DtOToUpdate);
 

@@ -45,14 +45,22 @@ public class ExpenseTypeCService implements ExpenseTypeService{
     }
 
     @Override
-    public boolean deleteById(Integer id)
+    public String deleteById(Integer id)
     {
-        boolean isDeleted = false;
-        if(expTypeRepo.existsById(id))
+        String isDeleted = "false";
+        try
         {
-            expTypeRepo.deleteById(id);
-            isDeleted = true;
+            if(expTypeRepo.existsById(id))
+            {
+                expTypeRepo.deleteById(id);
+                isDeleted = "true";
+            }
         }
+        catch (Exception ex)
+        {
+            isDeleted = "sql";
+        }
+
         return isDeleted;
     }
 
