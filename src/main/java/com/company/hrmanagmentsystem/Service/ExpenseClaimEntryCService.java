@@ -3,6 +3,7 @@ package com.company.hrmanagmentsystem.Service;
 import com.company.hrmanagmentsystem.Entity.ExpenseClaimEntryEntity;
 import com.company.hrmanagmentsystem.Mapper.ExpenseClaimEntryMapper;
 import com.company.hrmanagmentsystem.Repository.ExpenseClaimEntryRepo;
+import com.company.hrmanagmentsystem.model.ExpenseClaimDTO;
 import com.company.hrmanagmentsystem.model.ExpenseClaimEntryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class ExpenseClaimEntryCService implements ExpenseClaimEntryService{
 
     @Autowired private  ExpenseClaimEntryRepo repo;
     @Autowired private ExpenseClaimEntryMapper mapper;
+    @Autowired private ExpenseClaimService expenseClaimService;
 
 
     @Override
@@ -154,6 +156,17 @@ public class ExpenseClaimEntryCService implements ExpenseClaimEntryService{
     }
 
 
+    @Override
+    public List<Map<String , Object>> createEntriesToClaim(List<Map<String , Object>> entries)
+    {
+        for(Map<String, Object> entry : entries)
+        {
+            Create(entry);
+        }
+        return entries;
+
+
+    }
 
 
 

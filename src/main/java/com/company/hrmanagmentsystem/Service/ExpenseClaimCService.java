@@ -178,7 +178,7 @@ public class ExpenseClaimCService implements ExpenseClaimService{
 
 
     @Override
-    public ExpenseClaimDTO Submit(Map<String  , Object> Entry) // Entry : expenseClaimId and empId and description  and Status and date
+    public ExpenseClaimDTO Submit(Map<String  , Object> Entry) // Entry : expenseClaimId and empId and description  and status and date
     {
         Integer empId = (Integer) Entry.get("empId");
         Integer expenseClaimId = (Integer) Entry.get("expenseClaimId");

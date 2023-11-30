@@ -66,6 +66,16 @@ public class ExpenseClaimEntryController {
             return new ResponseEntity<>("Failed to Update! , Invalid id" , HttpStatus.OK );
     }
 
+    @PostMapping("/craeteEntriesToClaim")
+    public ResponseEntity<?> craeteEntriesToClaim(@RequestBody List<Map<String , Object>> entries)
+    {
+        List<Map<String , Object>> enteredEntries= service.createEntriesToClaim(entries);
+        if(enteredEntries != null)
+            return new ResponseEntity<>(enteredEntries , HttpStatus.OK);
+        else
+            return new ResponseEntity<>("Invalid entries" , HttpStatus.OK);
+    }
+
 
 
 }
