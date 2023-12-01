@@ -51,7 +51,7 @@ public class LeavedetailsController {
     {
         LeavedetailsDTO dto = service.updateLeaveDetails(dtObject);
         if(dto !=null)
-            return new ResponseEntity<>(dto , HttpStatus.OK);
+            return new ResponseEntity<>(dtObject , HttpStatus.OK);
         else
             return new ResponseEntity<>("Failed To Update , leave id , employee id and leave Type should be exist" , HttpStatus.OK);
     }

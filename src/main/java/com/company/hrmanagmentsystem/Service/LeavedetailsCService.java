@@ -120,8 +120,9 @@ public class LeavedetailsCService implements LeavedetailsService{
 
             });
             leavedetailsRepo.saveAndFlush(entity);
-            LeavedetailsDTO DTOupdated = leavedetailsMapper.leavedetailsDTO(entity);
-            return DTOupdated;
+            LeavedetailsDTO dtoUpdated = new LeavedetailsDTO();
+            dtoUpdated = leavedetailsMapper.leavedetailsDTO(entity);
+            return dtoUpdated;
         }
         else return null;
 
