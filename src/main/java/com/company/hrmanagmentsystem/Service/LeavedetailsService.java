@@ -17,5 +17,6 @@ public interface LeavedetailsService {
     public List<LeavedetailsDTO> getLeaveEmployeeWithinRange(Integer employeeId , Date FromDate , Date ToDate);
 
     public List<LeavedetailsDTO> getLeavePagination(Map<String , Object> pageable );
+    public java.sql.Date test(Integer id);
 
 }

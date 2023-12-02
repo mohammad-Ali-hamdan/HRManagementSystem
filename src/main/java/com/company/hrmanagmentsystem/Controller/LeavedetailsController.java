@@ -36,6 +36,11 @@ public class LeavedetailsController {
      else
          return new ResponseEntity<>("Invalid id" , HttpStatus.OK);
     }
+    @GetMapping("/test/{id}")
+    public ResponseEntity<?>test(@PathVariable Integer id)
+    {
+        return new ResponseEntity<>( service.test(id) , HttpStatus.OK);
+    }
 
     @DeleteMapping("/deletebyId/{id}")
     public ResponseEntity<String> deleteleavedetail(@PathVariable Integer id)
@@ -51,7 +56,7 @@ public class LeavedetailsController {
     {
         LeavedetailsDTO dto = service.updateLeaveDetails(dtObject);
         if(dto !=null)
-            return new ResponseEntity<>(dtObject , HttpStatus.OK);
+            return new ResponseEntity<>(dto , HttpStatus.OK);
         else
             return new ResponseEntity<>("Failed To Update , leave id , employee id and leave Type should be exist" , HttpStatus.OK);
     }

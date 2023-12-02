@@ -14,9 +14,9 @@ public class LeavedetailsDTO {
 
     private int id;
     private int leavetype;
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd")
+    //@JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd")
     private Date from;
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd")
+    //@JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd")
     private Date to;
     private int numberOfDays;
     private String note;

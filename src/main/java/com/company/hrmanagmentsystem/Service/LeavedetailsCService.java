@@ -58,6 +58,14 @@ public class LeavedetailsCService implements LeavedetailsService{
     }
 
     @Override
+    public java.sql.Date test(Integer id)
+    {
+        LeavedetailsEntity1 entity = leavedetailsRepo.findById(id).get();
+        return entity.getFrom();
+
+    }
+
+    @Override
     public boolean deleteleavedetail(Integer id)
     {
         boolean isDeleted = false;
