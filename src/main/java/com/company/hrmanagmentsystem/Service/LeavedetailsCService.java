@@ -83,7 +83,7 @@ public class LeavedetailsCService implements LeavedetailsService{
     {
 
 
-        if ((!leavedetailsRepo.existsById(leavedetailsDTO.getId())) &&
+        if (
                 employeeRepo.existsById(leavedetailsDTO.getEmployee()) &&
                 leaveTypeRepo.existsById(leavedetailsDTO.getLeavetype()))
         {

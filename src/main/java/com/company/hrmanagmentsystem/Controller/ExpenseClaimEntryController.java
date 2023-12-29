@@ -12,6 +12,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/apiExpenseClaimEntity")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ExpenseClaimEntryController {
     @Autowired
     private ExpenseClaimEntryService service;
@@ -69,13 +70,24 @@ public class ExpenseClaimEntryController {
     @PostMapping("/craeteEntriesToClaim")
     public ResponseEntity<?> craeteEntriesToClaim(@RequestBody List<Map<String , Object>> entries)
     {
-        List<Map<String , Object>> enteredEntries= service.createEntriesToClaim(entries);
-        if(enteredEntries != null)
-            return new ResponseEntity<>(enteredEntries , HttpStatus.OK);
+        //List<Map<String , Object>> enteredEntries= service.createEntriesToClaim(entries);
+        Integer claimId = service.createEntriesToClaim(entries);
+        if(claimId != 0)
+            return new ResponseEntity<>(claimId , HttpStatus.OK);
         else
             return new ResponseEntity<>("Invalid entries" , HttpStatus.OK);
     }
 
+
+    @GetMapping("/expensesEntryByClaimId/{id}")
+    public ResponseEntity<?> expensesEntryByClaimId(@PathVariable Integer id){
+        List<ExpenseClaimEntryDTO> DTOS =  service.expensesEntryByClaimId(id);
+        if(!DTOS.isEmpty())
+            return new ResponseEntity<>(DTOS , HttpStatus.OK);
+        else
+            return new ResponseEntity<>("Null List" , HttpStatus.OK );
+
+    }
 
 
 }

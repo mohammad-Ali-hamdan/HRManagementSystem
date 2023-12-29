@@ -3,17 +3,18 @@ package com.company.hrmanagmentsystem.Service;
 import com.company.hrmanagmentsystem.Entity.EmployeeEntity;
 import com.company.hrmanagmentsystem.Entity.ExpenseClaimEntity;
 import com.company.hrmanagmentsystem.Entity.ExpenseClaimEntryEntity;
+import com.company.hrmanagmentsystem.Entity.LeavedetailsEntity1;
 import com.company.hrmanagmentsystem.Mapper.EmployeeMapper;
 import com.company.hrmanagmentsystem.Mapper.ExpenseClaimEntryMapper;
 import com.company.hrmanagmentsystem.Mapper.ExpenseClaimMapper;
 import com.company.hrmanagmentsystem.Repository.EmployeeRepo;
 import com.company.hrmanagmentsystem.Repository.ExpenseClaimEntryRepo;
 import com.company.hrmanagmentsystem.Repository.ExpenseClaimRepo;
-import com.company.hrmanagmentsystem.model.EmployeeDTO;
-import com.company.hrmanagmentsystem.model.EmployeeExpenseClaimsDTO;
-import com.company.hrmanagmentsystem.model.ExpenseClaimDTO;
-import com.company.hrmanagmentsystem.model.ExpenseClaimEntryDTO;
+import com.company.hrmanagmentsystem.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -285,6 +286,42 @@ public class ExpenseClaimCService implements ExpenseClaimService{
 
         return returnBody;
     }
+
+    @Override
+    public List<ExpenseClaimDTO> paginationWithFilter(Map<String , Object> pageable)
+    {
+        Integer  pageSize = (Integer) pageable.get("pageSize");
+        Integer  pageNumber = (Integer) pageable.get("pageNumber");
+        List<Integer>  employee = (List<Integer> ) pageable.get("employee");
+        Pageable page = PageRequest.of(pageNumber, pageSize);
+        Page<ExpenseClaimEntity> filteredList = repo.paginationExpenseClaimWithFilter(employee , page );
+        List<ExpenseClaimDTO> DTOS = new ArrayList<>();
+        for(ExpenseClaimEntity entity: filteredList)
+        {
+            DTOS.add(mapper.DTO(entity));
+        }
+        return DTOS;
+
+
+    }
+
+    @Override
+    public List<ExpenseClaimDTO> paginationWithOutFilter(Map<String , Object> pageable)
+    {
+        Integer  pageSize = (Integer) pageable.get("pageSize");
+        Integer  pageNumber = (Integer) pageable.get("pageNumber");
+        Pageable page = PageRequest.of(pageNumber, pageSize);
+        Page<ExpenseClaimEntity> filteredList = repo.paginationExpenseClaim(page);
+        List<ExpenseClaimDTO> DTOS = new ArrayList<>();
+        for(ExpenseClaimEntity entity: filteredList)
+        {
+            DTOS.add(mapper.DTO(entity));
+        }
+        return DTOS;
+
+
+    }
+
 
 
 }

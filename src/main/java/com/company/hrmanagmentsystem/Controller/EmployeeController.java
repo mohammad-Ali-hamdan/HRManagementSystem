@@ -8,11 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/apiEmployee")
+@CrossOrigin(origins = "http://localhost:4200")
 public class EmployeeController {
 
     @Autowired public EmployeeService service;
@@ -37,6 +39,10 @@ public class EmployeeController {
         else
             return new ResponseEntity<>(null , HttpStatus.OK);
     }
+
+
+
+
 
 
 
@@ -66,15 +72,17 @@ public class EmployeeController {
 
 
     @DeleteMapping("/deleteEmp/{id}")
-    public ResponseEntity<String> deleteEmp(@PathVariable Integer id)
+
+    public ResponseEntity<?> deleteEmp(@PathVariable Integer id)
     {
         String isDeleted = service.deleteEmp(id);
+
         if(isDeleted.equals("true"))
-            return new ResponseEntity<>("Deleted" , HttpStatus.OK);
+            return new ResponseEntity<>("Deleted", HttpStatus.OK);
         else if(isDeleted.equals("false"))
             return new ResponseEntity<>("Failed to delete , Invalid id" , HttpStatus.NOT_FOUND);
         else
-            return new ResponseEntity<String>("Can't delete the record , foreign key restriction", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Can't delete the record , foreign key restriction", HttpStatus.NOT_FOUND);
 
     }
 

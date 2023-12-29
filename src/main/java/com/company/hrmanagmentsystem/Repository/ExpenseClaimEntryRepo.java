@@ -18,4 +18,5 @@ public interface ExpenseClaimEntryRepo extends JpaRepository<ExpenseClaimEntryEn
     @Query(nativeQuery = true , value = "Select * from managementsystem.expenseclaimentry Where expense_claim = :expenseClaimId")
     public List<ExpenseClaimEntryEntity> AllExpensesPerClaim(@Param("expenseClaimId") Integer claimId);
 
+
 }

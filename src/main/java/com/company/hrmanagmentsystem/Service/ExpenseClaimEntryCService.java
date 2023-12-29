@@ -22,6 +22,7 @@ public class ExpenseClaimEntryCService implements ExpenseClaimEntryService{
     @Autowired private  ExpenseClaimEntryRepo repo;
     @Autowired private ExpenseClaimEntryMapper mapper;
     @Autowired private ExpenseClaimService expenseClaimService;
+    @Autowired private ExpenseClaimRepo expenseClaimRepo;
 
 
 
@@ -66,6 +67,10 @@ public class ExpenseClaimEntryCService implements ExpenseClaimEntryService{
             {
                 Field field = ReflectionUtils.findField(entityClass1 , k);
                 field.setAccessible(true);
+                if (field.getType() == Double.class && v instanceof Integer) {
+                    v = ((Integer) v).doubleValue();
+                    ReflectionUtils.setField(field, EntityCreated, v);
+                }
                 if (field.getType() == java.sql.Date.class)
                 {
                     String dateString = (String) v;
@@ -160,17 +165,39 @@ public class ExpenseClaimEntryCService implements ExpenseClaimEntryService{
 
 
     @Override
-    public List<Map<String , Object>> createEntriesToClaim(List<Map<String , Object>> entries)
+    public Integer createEntriesToClaim(List<Map<String , Object>> entries)
     {
+        //List<Map<String , Object>>
+        Integer expenseClaimNewId  = expenseClaimRepo.MaxId()+1;
         for(Map<String, Object> entry : entries)
         {
+//            double x = (Double) entry.get("total");
+//            String formattedTotal;
+//            if (x == (int) x) {
+//                formattedTotal = String.format("%.2f", x);
+//                entry.put("total" , formattedTotal);
+//            }
+
+            entry.put("expenseClaim" , expenseClaimNewId);
             Create(entry);
         }
-        return entries;
+        //return entries;
+        return expenseClaimNewId;
 
 
     }
 
+    @Override
+    public List<ExpenseClaimEntryDTO> expensesEntryByClaimId(Integer id){
+
+        List<ExpenseClaimEntryEntity> listOfClaimEntity =  repo.AllExpensesPerClaim(id);
+        List<ExpenseClaimEntryDTO> DTOS = new ArrayList<>();
+        for(ExpenseClaimEntryEntity entity: listOfClaimEntity)
+        {
+            DTOS.add(mapper.expClaimEntryDTO(entity));
+        }
+        return DTOS;
+    }
 
 
 

@@ -14,6 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/apileavedetails")
+@CrossOrigin(origins = "http://localhost:4200")
 public class LeavedetailsController {
 
     @Autowired private LeavedetailsService service;
@@ -86,7 +87,7 @@ public class LeavedetailsController {
     }
 
 
-    @GetMapping("/listpagination")
+    @PutMapping("/listpagination")
     public ResponseEntity<List<LeavedetailsDTO>> Pagination(@RequestBody Map<String , Object> pageable    )
     {
 

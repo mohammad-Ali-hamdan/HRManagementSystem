@@ -27,8 +27,10 @@ public interface LeavedetailsRepo extends JpaRepository<LeavedetailsEntity1, Int
     public List<LeavedetailsEntity1> getLeavedetailsbyEmp(@Param("empId") Integer empId , @Param("leaveId") Integer leaveId );
 
 
-    @Query(nativeQuery = true , value = "Select * from managementsystem.leavedetails Where employee =  :empId  && leavetype = :leaveId")
-    public Page<LeavedetailsEntity1> findByEmpIdLeaveId(int empId , int leaveId , Pageable pageable);
+//    @Query(nativeQuery = true , value = "Select * from managementsystem.leavedetails Where employee =  :empId  && leavetype = :leaveId")
+//    public Page<LeavedetailsEntity1> findByEmpIdLeaveId(int empId , int leaveId , Pageable pageable);
 
-
+    @Query(nativeQuery = true, value = "SELECT * FROM managementsystem.leavedetails " +
+            "WHERE (:empId = 0 OR employee = :empId) AND (:leaveId = 0 OR leavetype = :leaveId)")
+    public Page<LeavedetailsEntity1> findByEmpIdLeaveId(int empId, int leaveId, Pageable pageable);
 }

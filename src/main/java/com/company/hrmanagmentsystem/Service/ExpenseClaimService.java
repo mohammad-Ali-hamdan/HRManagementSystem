@@ -2,6 +2,7 @@ package com.company.hrmanagmentsystem.Service;
 
 import com.company.hrmanagmentsystem.model.EmployeeExpenseClaimsDTO;
 import com.company.hrmanagmentsystem.model.ExpenseClaimDTO;
+import com.company.hrmanagmentsystem.model.ExpenseClaimWithEmployeeDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -18,5 +19,8 @@ public interface ExpenseClaimService {
     public List<ExpenseClaimDTO> getAllClaimPerEmployee (Integer empId);
     public EmployeeExpenseClaimsDTO getAllClaimsWithDetailsPerEmployee(Integer id);
     public Map<String,Object>  getTotalPerEmployeePerType(Map<String , Object>  body);
+    public List<ExpenseClaimDTO> paginationWithFilter(Map<String , Object> pageable);
+    public List<ExpenseClaimDTO> paginationWithOutFilter(Map<String , Object> pageable);
+//    public List<ExpenseClaimWithEmployeeDTO> paginationWithNamesEmployee (Map<String , Object> pageable);
 
 }

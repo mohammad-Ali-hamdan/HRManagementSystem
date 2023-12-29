@@ -12,6 +12,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/apiExpenseType")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ExpenseTypeController {
     @Autowired private ExpenseTypeService service;
 
