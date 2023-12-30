@@ -24,7 +24,7 @@ public class ExpenseTypeController {
         if(!DTOS.isEmpty())
             return new ResponseEntity<>(DTOS , HttpStatus.OK);
         else
-            return new ResponseEntity<>("No data " , HttpStatus.OK);
+            return new ResponseEntity<>(null , HttpStatus.NOT_FOUND);
 
     }
 

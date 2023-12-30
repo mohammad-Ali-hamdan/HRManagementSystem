@@ -21,10 +21,11 @@ public class ExpenseClaimEntryController {
     public ResponseEntity<?> getAll()
     {
         List<ExpenseClaimEntryDTO> DTOS =  service.getAll();
+
         if(!DTOS.isEmpty())
             return new ResponseEntity<>(DTOS , HttpStatus.OK);
         else
-            return new ResponseEntity<>("Null List" , HttpStatus.OK );
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND ); //"Null List" ,
     }
 
     @GetMapping("/getByid/{id}")
@@ -44,7 +45,7 @@ public class ExpenseClaimEntryController {
         if(DTOCreated != null)
             return new ResponseEntity<>(DTOCreated , HttpStatus.OK);
         else
-            return new ResponseEntity<>("Failed to Create! , invalid id" , HttpStatus.OK );
+            return new ResponseEntity<>("Failed to Create! , invalid id" , HttpStatus.NOT_FOUND );
 
     }
     @DeleteMapping("/delete/{id}")
@@ -54,7 +55,7 @@ public class ExpenseClaimEntryController {
         if(isDeleted)
             return new ResponseEntity<>("Deleted" , HttpStatus.OK);
         else
-            return new ResponseEntity<>("Failed to Delete! , Invalid id" , HttpStatus.OK );
+            return new ResponseEntity<>("Failed to Delete! , Invalid id" , HttpStatus.NOT_FOUND );
     }
 
     @PatchMapping("/update")
@@ -64,7 +65,7 @@ public class ExpenseClaimEntryController {
         if(UpdatedDTO != null)
             return new ResponseEntity<>(UpdatedDTO , HttpStatus.OK);
         else
-            return new ResponseEntity<>("Failed to Update! , Invalid id" , HttpStatus.OK );
+            return new ResponseEntity<>("Failed to Update! , Invalid id" , HttpStatus.NOT_FOUND );
     }
 
     @PostMapping("/craeteEntriesToClaim")
@@ -85,8 +86,21 @@ public class ExpenseClaimEntryController {
         if(!DTOS.isEmpty())
             return new ResponseEntity<>(DTOS , HttpStatus.OK);
         else
-            return new ResponseEntity<>("Null List" , HttpStatus.OK );
+            return new ResponseEntity<>( HttpStatus.OK ); //"Null List" ,
 
+    }
+
+
+
+    @DeleteMapping("/deleteEntryAndSubmitClaim/{id}")
+    public ResponseEntity<?> deleteEntryAndSubmitClaim(@PathVariable Integer id)
+    {
+        boolean isDeleted =  service.deleteEntryAndSubmitClaim(id);
+        if(isDeleted){
+            return new ResponseEntity<>("Deleted and Updated" , HttpStatus.OK );
+        }
+        else
+            return new ResponseEntity<>("Failed to Delete! , Invalid id" , HttpStatus.NOT_FOUND );
     }
 
 

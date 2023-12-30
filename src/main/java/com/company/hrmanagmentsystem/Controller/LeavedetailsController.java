@@ -26,7 +26,7 @@ public class LeavedetailsController {
         if(!dtos.isEmpty())
             return new ResponseEntity<>(dtos , HttpStatus.OK);
         else
-            return new ResponseEntity<>(null , HttpStatus.OK);
+            return new ResponseEntity<>(null , HttpStatus.NOT_FOUND);
     }
     @GetMapping("/getbyId/{id}")
     public ResponseEntity<?> getbyId(@PathVariable Integer id)
@@ -35,7 +35,7 @@ public class LeavedetailsController {
      if(dto != null)
          return new ResponseEntity<>(dto , HttpStatus.OK);
      else
-         return new ResponseEntity<>("Invalid id" , HttpStatus.OK);
+         return new ResponseEntity<>("Invalid id" , HttpStatus.NOT_FOUND);
     }
     @GetMapping("/test/{id}")
     public ResponseEntity<?>test(@PathVariable Integer id)
@@ -50,7 +50,7 @@ public class LeavedetailsController {
        if(isDeleted)
            return new ResponseEntity<>("Deleted" , HttpStatus.OK);
        else
-           return new ResponseEntity<>("Id not exist. Failed to Delete" , HttpStatus.OK);
+           return new ResponseEntity<>("Id not exist. Failed to Delete" , HttpStatus.NOT_FOUND);
     }
     @PatchMapping("/updateLeavedetails")
     public ResponseEntity<?> updateLeaveDetails(@RequestBody Map<String , Object> dtObject)
@@ -59,7 +59,7 @@ public class LeavedetailsController {
         if(dto !=null)
             return new ResponseEntity<>(dto , HttpStatus.OK);
         else
-            return new ResponseEntity<>("Failed To Update , leave id , employee id and leave Type should be exist" , HttpStatus.OK);
+            return new ResponseEntity<>("Failed To Update , leave id , employee id and leave Type should be exist" , HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/SubmitLeave")
@@ -69,7 +69,7 @@ public class LeavedetailsController {
         if(dto != null)
             return new ResponseEntity<>(dto , HttpStatus.OK);
         else
-            return new ResponseEntity<>("Failed to submit , leave id must be unique , employee id and leave Type should be exist" , HttpStatus.OK);
+            return new ResponseEntity<>("Failed to submit , leave id must be unique , employee id and leave Type should be exist" , HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/getleaveEmployeeRange")
@@ -83,7 +83,7 @@ public class LeavedetailsController {
          if(!dtos.isEmpty())
              return new ResponseEntity<>(dtos , HttpStatus.OK);
          else
-             return new ResponseEntity<>("There is no leaves in the provided range for this employee" , HttpStatus.OK);
+             return new ResponseEntity<>("There is no leaves in the provided range for this employee" , HttpStatus.NOT_FOUND);
     }
 
 

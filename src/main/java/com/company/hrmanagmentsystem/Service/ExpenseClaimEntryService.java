@@ -18,4 +18,5 @@ public interface ExpenseClaimEntryService {
     public Date ConvertDateToJavaDate(java.sql.Date date);
     public Integer createEntriesToClaim(List<Map<String , Object>> entries);
     public List<ExpenseClaimEntryDTO> expensesEntryByClaimId(Integer id);
+    public boolean deleteEntryAndSubmitClaim(Integer id);
 }

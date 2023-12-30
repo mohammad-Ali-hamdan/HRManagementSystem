@@ -32,6 +32,9 @@ public interface ExpenseClaimRepo extends JpaRepository<ExpenseClaimEntity, Inte
     @Query(nativeQuery = true, value = "SELECT * FROM managementsystem.expenseclaim ")
     public Page<ExpenseClaimEntity> paginationExpenseClaim(Pageable pageable);
 
+
+
+
 //    @Query(nativeQuery = true, value = "SELECT e.id, e.date, e.description, e.total, e.status, emp.name " +
 //            "FROM managementsystem.expenseclaim e " +
 //            "JOIN managementsystem.employee emp ON e.employee_Id = emp.id " +

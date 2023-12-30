@@ -28,7 +28,7 @@ public class ExpenseClaimController {
         if (!DTOS.isEmpty())
             return new ResponseEntity<>(DTOS, HttpStatus.OK);
         else
-            return new ResponseEntity<>("No Content Found", HttpStatus.OK);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/getById/{id}")

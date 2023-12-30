@@ -26,7 +26,7 @@ public class LeaveTypeController {
         if(!leaveTypeDTOS.isEmpty())
             return new ResponseEntity<List<LeaveTypeDTO>>(leaveTypeDTOS , HttpStatus.OK);
         else
-            return new ResponseEntity<>(null , HttpStatus.OK);
+            return new ResponseEntity<>(null , HttpStatus.NOT_FOUND);
 
 
     }

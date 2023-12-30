@@ -27,7 +27,7 @@ public class EmployeeController {
         if(!employeeDTOList.isEmpty())
             return new ResponseEntity<List<EmployeeDTO>>(employeeDTOList , HttpStatus.OK);
         else
-            return new ResponseEntity<>(null , HttpStatus.OK);
+            return new ResponseEntity<>(null , HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/getbyid/{id}")
@@ -37,7 +37,7 @@ public class EmployeeController {
         if(employeeDTO != null)
             return new ResponseEntity<EmployeeDTO>(employeeDTO , HttpStatus.OK);
         else
-            return new ResponseEntity<>(null , HttpStatus.OK);
+            return new ResponseEntity<>(null , HttpStatus.NOT_FOUND);
     }
 
 
@@ -52,7 +52,7 @@ public class EmployeeController {
     {
         List<EmployeeDTO> employeeDTOS =  service.ListEmployeesByDepartment(id);
         if (employeeDTOS.isEmpty())
-            return new ResponseEntity<>(null ,HttpStatus.OK );
+            return new ResponseEntity<>(null ,HttpStatus.NOT_FOUND );
         else
             return new ResponseEntity<List<EmployeeDTO>>(employeeDTOS ,HttpStatus.OK);
     }
@@ -64,7 +64,7 @@ public class EmployeeController {
         if (employeeDTO != null)
             return new ResponseEntity<EmployeeDTO>(employeeDTO ,HttpStatus.OK );
         else
-            return new ResponseEntity<>("The department id must be valid and employee id must be unique " ,HttpStatus.OK);
+            return new ResponseEntity<>("The department id must be valid and employee id must be unique " ,HttpStatus.NOT_FOUND);
 
     }
 
@@ -94,7 +94,7 @@ public class EmployeeController {
         if (employeeDTO != null)
             return new ResponseEntity<EmployeeDTO>(employeeDTO ,HttpStatus.OK );
         else
-            return new ResponseEntity<>("The department id must be valid and employee id must be valid" ,HttpStatus.OK);
+            return new ResponseEntity<>("The department id must be valid and employee id must be valid" ,HttpStatus.NOT_FOUND);
 
     }
 

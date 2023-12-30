@@ -171,13 +171,6 @@ public class ExpenseClaimEntryCService implements ExpenseClaimEntryService{
         Integer expenseClaimNewId  = expenseClaimRepo.MaxId()+1;
         for(Map<String, Object> entry : entries)
         {
-//            double x = (Double) entry.get("total");
-//            String formattedTotal;
-//            if (x == (int) x) {
-//                formattedTotal = String.format("%.2f", x);
-//                entry.put("total" , formattedTotal);
-//            }
-
             entry.put("expenseClaim" , expenseClaimNewId);
             Create(entry);
         }
@@ -200,5 +193,34 @@ public class ExpenseClaimEntryCService implements ExpenseClaimEntryService{
     }
 
 
+    @Override
+    public boolean deleteEntryAndSubmitClaim(Integer id){
+        if(repo.existsById(id)){
+            Integer expenseClaimId = repo.findById(id).get().getExpenseClaim();
+            boolean isDeleted = delete(id);
+            if(isDeleted){
+                Double  newTotal = repo.CalculateTotalClaim(expenseClaimId);
+                ExpenseClaimEntity expenseClaim =expenseClaimRepo.findById(expenseClaimId).get();
+                if(newTotal == null)
+                {
+                    String isDeletedClaim = expenseClaimService.delete(expenseClaimId);
+                    if(isDeletedClaim == "true"){return true;}
+                    else return false;
+
+                }
+                else {
+                    expenseClaim.setTotal(newTotal);
+                    expenseClaimRepo.saveAndFlush(expenseClaim);
+
+                    return true;
+                }
+            }
+            else
+                return false;
+        }
+        else
+            return false;
+
+    }
 
 }
