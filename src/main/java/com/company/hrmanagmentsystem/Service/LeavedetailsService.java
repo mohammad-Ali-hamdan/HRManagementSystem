@@ -18,5 +18,6 @@ public interface LeavedetailsService {
 
     public List<LeavedetailsDTO> getLeavePagination(Map<String , Object> pageable );
     public java.sql.Date test(Integer id);
+    public List<LeavedetailsDTO> pageableComponent(Map<String , Object> pageable );
 
 }

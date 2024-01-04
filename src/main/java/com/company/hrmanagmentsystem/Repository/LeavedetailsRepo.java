@@ -33,4 +33,9 @@ public interface LeavedetailsRepo extends JpaRepository<LeavedetailsEntity1, Int
     @Query(nativeQuery = true, value = "SELECT * FROM managementsystem.leavedetails " +
             "WHERE (:empId = 0 OR employee = :empId) AND (:leaveId = 0 OR leavetype = :leaveId)")
     public Page<LeavedetailsEntity1> findByEmpIdLeaveId(int empId, int leaveId, Pageable pageable);
+
+    @Query(nativeQuery = true , value ="  Select l.id , l.leavetype  , l.fromdate ,  l.Todate , l.number_of_days ,  l.note , l.employee  from managementsystem.leavedetails as l\n" +
+            "join managementsystem.employee  as e On e.id = l.employee \n" +
+            "join managementsystem.leavetype as t On t.id = l.leavetype Where lower(e.name) like CONCAT('%', lower(:text), '%') OR lower(t.name) like CONCAT('%', lower(:text), '%') ")
+    public Page<LeavedetailsEntity1> pageableComponent(String text  , Pageable pageable);
 }

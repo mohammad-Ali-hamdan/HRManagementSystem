@@ -172,7 +172,20 @@ public class LeavedetailsCService implements LeavedetailsService{
     }
 
 
-
+    @Override
+    public List<LeavedetailsDTO> pageableComponent(Map<String , Object> pageable ){
+        Integer  pageSize = (Integer) pageable.get("pageSize");
+        Integer  pageNumber = (Integer) pageable.get("pageNumber");
+        String  text = (String) pageable.get("text");
+        Pageable page = PageRequest.of(pageNumber, pageSize);
+        Page<LeavedetailsEntity1> filteredList = leavedetailsRepo.pageableComponent(text , page );
+        List<LeavedetailsDTO> DTOS = new ArrayList<>();
+        for(LeavedetailsEntity1 entity: filteredList)
+        {
+            DTOS.add(leavedetailsMapper.leavedetailsDTO(entity));
+        }
+        return DTOS;
+    }
 
 
 

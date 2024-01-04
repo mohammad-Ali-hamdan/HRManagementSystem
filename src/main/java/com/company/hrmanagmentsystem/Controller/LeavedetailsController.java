@@ -95,6 +95,14 @@ public class LeavedetailsController {
         return new ResponseEntity<>(dtos , HttpStatus.OK);
     }
 
+    @PutMapping("/pageableComponent")
+    public ResponseEntity<List<LeavedetailsDTO>> pageableComponent(@RequestBody Map<String , Object> pageable    )
+    {
+
+        List<LeavedetailsDTO> dtos = service.pageableComponent(pageable);
+        return new ResponseEntity<>(dtos , HttpStatus.OK);
+    }
+
 
 
 }
